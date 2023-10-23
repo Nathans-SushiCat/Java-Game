@@ -2,7 +2,7 @@
   <artifact type="jar" name="First Java 2D Game:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/First_Java_2D_Game_jar</output-path>
     <root id="archive" name="First Java 2D Game.jar">
-      <element id="module-output" name="First Java 2D Game" />
+      <element id="module-output" name="Java-Game" />
     </root>
   </artifact>
 </component>
