@@ -21,6 +21,14 @@ public class Player extends Entity {
         setDefaultValues();
         getPlayerImage();
     }
+    public Player(GamePanel gp, KeyHandler keyH, int x, int y){
+        this.gp = gp;
+        this.keyH = keyH;
+        setDefaultValues();
+        getPlayerImage();
+        this.x = x;
+        this.y = y;
+    }
     public void setDefaultValues(){
         x = 100;
         y = 100;
@@ -96,6 +104,7 @@ public class Player extends Entity {
             spriteCounter = 0;
         }
     }
+
     public void removeLife(){
         for(int i = hearts.length-1; i >= 0; i--) {
             if(immunityTimer == 0){
@@ -106,7 +115,6 @@ public class Player extends Entity {
                     if(lifes == 0){
                         gp.entities.remove(this);
                     }
-                    System.out.println(lifes);
                     return;
                 }
             }

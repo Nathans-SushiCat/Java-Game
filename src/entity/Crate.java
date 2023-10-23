@@ -22,7 +22,6 @@ public class Crate extends Entity{
         getSprite();
         this.x = x;
         this.y = y;
-        direction = "idle";
     }
     public Crate(GamePanel gp, KeyHandler keyH){
 
@@ -34,7 +33,6 @@ public class Crate extends Entity{
     public void setDefaultValues(){
         x = 200;
         y = 300;
-        direction = "idle";
         solid = true;
     }
     public void getSprite(){
