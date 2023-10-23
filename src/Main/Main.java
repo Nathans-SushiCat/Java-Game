@@ -12,7 +12,7 @@ public class Main {
 
         //window.setExtendedState(JFrame.MAXIMIZED_BOTH);
         //window.setUndecorated(true);
-        window.setTitle("2d Game");
+        window.setTitle("Java-Game");
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);

@@ -21,6 +21,8 @@ public class Entity implements Collidable {
     public BufferedImage image1, image2, image3, image4;
     public String direction;
     public GamePanel gp;
+    public int sizeVertical = GamePanel.tileSize;
+    public int sizeHorizontal = GamePanel.tileSize;;
     public int spriteCounter = 0;
     public int spriteNum = 1;
 
@@ -55,7 +57,13 @@ public class Entity implements Collidable {
             double horizontalDifference = this.x - otherObject.x;
             double verticalDifference = this.y - otherObject.y;
 
-            if (Math.abs(horizontalDifference) <= GamePanel.tileSize && Math.abs(verticalDifference) <= GamePanel.tileSize) {
+            double verticalSize;
+            double horizontalSize;
+
+            verticalSize = sizeVertical/2.0 + otherObject.sizeVertical/2.0;
+            horizontalSize = sizeHorizontal/2.0 + otherObject.sizeHorizontal/2.0;
+
+            if (Math.abs(horizontalDifference) <= horizontalSize && Math.abs(verticalDifference) <= verticalSize) {
                 if (Math.abs(horizontalDifference) >= Math.abs(verticalDifference)) {
                     if (horizontalDifference > 0) {
                         return new Collision(Collision.CollisionDirection.RIGHT, otherObject);
