@@ -1,6 +1,5 @@
 package World;
 
-import Main.GamePanel;
 import jdk.jfr.Description;
 
 import java.awt.*;
@@ -34,25 +33,6 @@ public class TypeWriter {
         waitTime = speed*4;
     }
 
-    public TypeWriter(String[] texts, int x, int y, float speed){
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        resetvals();
-        waitTime = speed*4;
-        multipleTextsMode = true;
-        this.texts = texts;
-        this.text = "";
-    }
-
-    public TypeWriter(int x, int y, float speed){
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        waitTime = speed*4;
-        text = "";
-    }
-
     public void changeText(String text){
         this.text = text;
         resetvals();
@@ -64,9 +44,9 @@ public class TypeWriter {
     public void changeText(String text, float speed){
         this.text = text;
         resetvals();
-        this.speed = speed;
         waitTime = speed*4;
         multipleTextsMode = false;
+        this.speed = speed;
     }
     public void changeTexts(String[] texts){
         this.texts = texts;
@@ -93,8 +73,6 @@ public class TypeWriter {
     }
 
     public void update(){
-        if(multipleTextsMode)
-            text = texts[textsIndex];
         //Finished Writing
         if(currentChar +1 > text.length()){
             waitTime -= 1;
@@ -111,6 +89,9 @@ public class TypeWriter {
             return;
         }
 
+        if(multipleTextsMode)
+            text = texts[textsIndex];
+
         counter++;
         if(counter >= speed){
             counter = 0;
@@ -119,18 +100,11 @@ public class TypeWriter {
         }
     }
 
-    @Override
-    public String toString() {
-        return currentText;
-    }
-
     public void addNextChar(Character nextChar){
         currentText+= nextChar;
-        if(nextChar != ' ')
-            AudioController.playTypeWriterSound();
     }
 
     public void draw(Graphics2D g2){
-        g2.drawString(currentText, x+(GamePanel.tileSize/2)-(g2.getFontMetrics().stringWidth(text)/2),y);
+        g2.drawString(currentText, x,y);
     }
 }

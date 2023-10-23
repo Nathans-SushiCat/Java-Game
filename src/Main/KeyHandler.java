@@ -5,8 +5,8 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, actionPressed;
-    public boolean upPressed2, downPressed2, leftPressed2, rightPressed2, actionPressed2;
+    public boolean upPressed, downPressed, leftPressed, rightPressed;
+    public boolean upPressed2, downPressed2, leftPressed2, rightPressed2;
 
     public boolean esc, F11, space;
 
@@ -44,11 +44,6 @@ public class KeyHandler implements KeyListener {
             rightPressed = true;
         }
 
-        //Action
-        if(code == KeyEvent.VK_CONTROL){
-            actionPressed = true;
-        }
-
         //Walk Player 2
         if(code == KeyEvent.VK_UP){
             upPressed2 = true;
@@ -62,12 +57,6 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_RIGHT){
             rightPressed2 = true;
         }
-
-        //Action Player 2
-        if(code == KeyEvent.VK_E){
-            actionPressed2 = true;
-        }
-
     }
 
     @Override
@@ -99,11 +88,6 @@ public class KeyHandler implements KeyListener {
             rightPressed = false;
         }
 
-        //Action
-        if(code == KeyEvent.VK_CONTROL){
-            actionPressed = false;
-        }
-
         //Walk Player 2
         if(code == KeyEvent.VK_UP){
             upPressed2 = false;
@@ -116,11 +100,6 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_RIGHT){
             rightPressed2 = false;
-        }
-
-        //Action Player 2
-        if(code == KeyEvent.VK_E){
-            actionPressed2 = false;
         }
     }
 }

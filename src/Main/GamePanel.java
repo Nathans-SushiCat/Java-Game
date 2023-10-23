@@ -1,6 +1,5 @@
 package Main;
 
-import World.AudioController;
 import World.TypeWriter;
 import entity.*;
 
@@ -28,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     TypeWriter typeWriter = new TypeWriter("Hello i am the Human",400,300, 5);
 
+
     public ArrayList<Entity> entities = new ArrayList<Entity>();
 
     GameManager gameManager = new GameManager(keyH);
@@ -44,18 +44,15 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
 
-        typeWriter.changeTexts(new String[]{"Hello", "and Welcome to this mess", "idk what this is all for"}, 7);
+        typeWriter.changeTexts(new String[]{"Hello", "and Welcome to this mess", "idk what this is all for"}, 10);
 
         Collections.addAll(entities,
-                new Lever(this,keyH),
-                new Lever(this,keyH, 300,200),
+                new Player(this, keyH),
+                new Player2(this, keyH),
                 new Crate(this, keyH),
                 new Crate(this, keyH, 200, 400),
                 new Crate(this, keyH, 100, 300),
-                new Lava(this, keyH),
-                new NPC(this, keyH, "NPC", new String[]{"Hello", "my friend", "What's up?", "have you already done your homework?"}, 5),
-                new Player(this, keyH),
-                new Player2(this, keyH)
+                new Lava(this, keyH)
         );
     }
 
@@ -100,7 +97,6 @@ public class GamePanel extends JPanel implements Runnable{
             e.update();
         }
 
-        //Collision Controller
         for( int j = 0; j < entities.size(); j++){
             try {
                 for(int i = 0; i < entities.size(); i++){
@@ -119,9 +115,11 @@ public class GamePanel extends JPanel implements Runnable{
                 }
                 entities.get(j).collisions.clear();
             }catch (Exception e){
-                e.printStackTrace();
+
             }
+
         }
+
     }
 
     public void paintComponent(Graphics g){

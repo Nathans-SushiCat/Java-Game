@@ -112,6 +112,7 @@ public class Player2 extends Entity {
                     if(lifes == 0){
                         gp.entities.remove(this);
                     }
+                    System.out.println(lifes);
                     return;
                 }
             }
