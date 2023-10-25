@@ -44,21 +44,25 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
 
-        typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.2"}, 4);
+        typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.3"}, 4);
 
         Lever lever = new Lever(this,keyH, 250,100, Lever_Handle.State.LEFT);
         Lever lever2 = new Lever(this, keyH, 250, 450, Lever_Handle.State.RIGHT);
+        Portal portal2 = new Portal(this,400,200);
+
 
         entities.add(lever);
         entities.add(lever2);
+        entities.add(portal2);
 
         Collections.addAll(entities,
                 new Crate(this, keyH, 200, 600),
                 new Crate(this, keyH, 100, 600),
-                new Crate(this, keyH, 400, 200),
+                new Crate(this, keyH, 400, 400),
                 new Lava(this, keyH),
                 new NPC(this, keyH, "NPC", new String[]{"Hello", "my friend", "What's up?", "have you already done your homework?"}, 5),
                 new Spike(this, keyH, 500, 100, lever),
+                new Portal(this,1000,200, portal2),
                 new Ein_Etwas(this, 900,200, 180, lever2),
                 new Player(this, keyH,100,300),
                 new Player2(this, keyH,100,400)
@@ -109,6 +113,8 @@ public class GamePanel extends JPanel implements Runnable{
         //Collision Controller
         for( int j = 0; j < entities.size(); j++){
             try {
+                entities.get(j).collisions.clear();
+
                 for(int i = 0; i < entities.size(); i++){
                     if(entities.get(j) != entities.get(i))
                         entities.get(j).collisions.add(entities.get(j).createCollisionWith(entities.get(i)));
@@ -123,7 +129,6 @@ public class GamePanel extends JPanel implements Runnable{
                     if(!anyCollision)
                         entities.get(j).handleCollision(c);
                 }
-                entities.get(j).collisions.clear();
             }catch (Exception e){
                 e.printStackTrace();
             }

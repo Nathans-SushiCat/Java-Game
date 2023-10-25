@@ -25,14 +25,28 @@ public class Ein_Etwas_Bullet extends Entity{
         getSprites();
         this.x = x;
         this.y = y;
-        solid = false;
+        solid = true;
         this.parent = parent;
+        AudioController.playShootSound();
+    }
+
+    public Ein_Etwas_Bullet(GamePanel gp, int x, int y, int speed){
+
+        this.speed = speed;
+        sizeHorizontal = 4 * GamePanel.scale;;
+        sizeVertical = 2 * GamePanel.scale;
+        this.gp = gp;
+        getSprites();
+        this.x = x;
+        this.y = y;
+        solid = true;
         AudioController.playShootSound();
     }
 
     public void getSprites(){
         try {
             image1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Ein_Etwas/Ein_Etwas-Bullet.png")));
+            //image1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Ein_Etwas/Ein_Etwas-Bullet.png")));
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -50,12 +64,14 @@ public class Ein_Etwas_Bullet extends Entity{
                 gp.entities.remove(this);
                 return;
             }
+
             if(collision.collidedEntity instanceof Player2 player2){
                 player2.removeLifeIgnoreImunity();
                 gp.entities.remove(this);
                 return;
             }
-            if(collision.collidedEntity != parent){
+
+            if(parent == null || collision.collidedEntity != parent){
                 gp.entities.remove(this);
                 AudioController.playHitSound();
             }
