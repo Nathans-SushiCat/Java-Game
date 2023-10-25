@@ -28,6 +28,16 @@ public class Lever extends Entity{
         leverHandle = new Lever_Handle(gp,keyH,x,y, this);
         gp.entities.add(leverHandle);
     }
+    public Lever(GamePanel gp, KeyHandler keyH, int x, int y, Lever_Handle.State state){
+        this.gp = gp;
+        this.keyH = keyH;
+        solid = false;
+        this.x = x;
+        this.y = y;
+        getSprite();
+        leverHandle = new Lever_Handle(gp,keyH,x,y, state ,this);
+        gp.entities.add(leverHandle);
+    }
 
     public void getSprite(){
         try {

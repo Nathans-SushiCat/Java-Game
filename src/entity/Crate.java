@@ -34,6 +34,7 @@ public class Crate extends Entity{
         x = 200;
         y = 300;
         solid = true;
+        speed = 2;
     }
     public void getSprite(){
         try {
@@ -54,19 +55,19 @@ public class Crate extends Entity{
             switch (collision.getDirection()) {
                 case TOP:
                     if(!HasSolidInDirection(Collision.CollisionDirection.DOWN))
-                        y-=3;
+                        y-=speed;
                     break;
                 case DOWN:
                     if(!HasSolidInDirection(Collision.CollisionDirection.TOP))
-                        y+=3;
+                        y+=speed;
                     break;
                 case RIGHT:
                     if(!HasSolidInDirection(Collision.CollisionDirection.LEFT))
-                        x+=3;
+                        x+=speed;
                     break;
                 case LEFT:
                     if(!HasSolidInDirection(Collision.CollisionDirection.RIGHT))
-                        x-=3;
+                        x-=speed;
                     break;
                 case NONE:
                     break;

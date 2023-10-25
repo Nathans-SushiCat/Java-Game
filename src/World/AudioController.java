@@ -39,5 +39,14 @@ public class AudioController {
     public static void playLeverEndSound(){
         playSound("LeverEnd.wav");
     }
+    public static void playHitSound(){
+        playSound("Hit.wav");
+    }
+    public static void playHurtSound(){
+        playSound("Hurt.wav");
+    }
+    public static void playShootSound(){
+        playSound("Shoot.wav");
+    }
 
 }

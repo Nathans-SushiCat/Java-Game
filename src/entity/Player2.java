@@ -2,6 +2,7 @@ package entity;
 
 import Main.GamePanel;
 import Main.KeyHandler;
+import World.AudioController;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -22,6 +23,16 @@ public class Player2 extends Entity {
         this.keyH = keyH;
         setDefaultValues();
         getPlayerImage();
+
+    }
+    public Player2(GamePanel gp, KeyHandler keyH, int x, int y){
+
+        this.gp = gp;
+        this.keyH = keyH;
+        setDefaultValues();
+        getPlayerImage();
+        this.x = x;
+        this.y = y;
 
     }
     
@@ -100,9 +111,6 @@ public class Player2 extends Entity {
     }
 
     public void removeLife(){
-        if(lifes < 1)
-            return;
-
         for(int i = hearts.length-1; i >= 0; i--) {
             if(immunityTimer == 0){
                 if(hearts[i].getLifes() >= 1){
@@ -112,8 +120,23 @@ public class Player2 extends Entity {
                     if(lifes == 0){
                         gp.entities.remove(this);
                     }
+                    AudioController.playHurtSound();
                     return;
                 }
+            }
+        }
+    }
+
+    public void removeLifeIgnoreImunity(){
+        for(int i = hearts.length-1; i >= 0; i--) {
+            if (hearts[i].getLifes() >= 1) {
+                hearts[i].removeLife();
+                lifes--;
+                if (lifes == 0) {
+                    gp.entities.remove(this);
+                }
+                AudioController.playHurtSound();
+                return;
             }
         }
     }

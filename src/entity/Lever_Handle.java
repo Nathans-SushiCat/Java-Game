@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Lever_Handle extends Entity{
     KeyHandler keyH;
     Lever lever;
-    enum State{
+    public enum State{
         LEFT,
         RIGHT,
         NONE
@@ -24,6 +24,27 @@ public class Lever_Handle extends Entity{
         solid = true;
         this.x = x;
         this.y = y;
+        this.lever = lever;
+        this.sizeVertical = 10 * GamePanel.scale;
+        this.sizeHorizontal = 2 * GamePanel.scale;
+        getSprite();
+    }
+    public Lever_Handle(GamePanel gp, KeyHandler keyH, int x, int y, State state, Lever lever){
+        this.gp = gp;
+        this.keyH = keyH;
+        solid = true;
+        this.currentState = state;
+
+        if(state == State.LEFT){
+            this.x = x-GamePanel.tileSize/4;
+        }else if(state == State.RIGHT){
+            this.x = x+GamePanel.tileSize/4;
+        }else {
+            this.x = x;
+        }
+        this.y = y;
+
+
         this.lever = lever;
         this.sizeVertical = 10 * GamePanel.scale;
         this.sizeHorizontal = 2 * GamePanel.scale;
@@ -47,20 +68,20 @@ public class Lever_Handle extends Entity{
             // Handle the collision direction
             switch (collision.getDirection()) {
                 case LEFT:
-                    if(currentState.equals(State.RIGHT))
+                    if(currentState.equals(State.LEFT))
                         break;
 
                     if(x > lever.x-GamePanel.tileSize/4){
                         x -= 1;
                         AudioController.playPushLeverSound();
                         currentState = State.NONE;
-                        }else {
-                        currentState = State.RIGHT;
+                    }else {
+                        currentState = State.LEFT;
                         AudioController.playLeverEndSound();
                     }
                     break;
                 case RIGHT:
-                    if(currentState.equals(State.LEFT))
+                    if(currentState.equals(State.RIGHT))
                         break;
 
                     if(x < lever.x+GamePanel.tileSize/4){
@@ -69,7 +90,7 @@ public class Lever_Handle extends Entity{
                         currentState = State.NONE;
                     }else {
                         AudioController.playLeverEndSound();
-                        currentState = State.LEFT;
+                        currentState = State.RIGHT;
                     }
                     break;
             }

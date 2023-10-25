@@ -44,18 +44,24 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
 
-        typeWriter.changeTexts(new String[]{"Hello", "and Welcome to this mess", "idk what this is all for"}, 7);
+        typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.2"}, 4);
+
+        Lever lever = new Lever(this,keyH, 250,100, Lever_Handle.State.LEFT);
+        Lever lever2 = new Lever(this, keyH, 250, 450, Lever_Handle.State.RIGHT);
+
+        entities.add(lever);
+        entities.add(lever2);
 
         Collections.addAll(entities,
-                new Lever(this,keyH),
-                new Lever(this,keyH, 300,200),
-                new Crate(this, keyH),
-                new Crate(this, keyH, 200, 400),
-                new Crate(this, keyH, 100, 300),
+                new Crate(this, keyH, 200, 600),
+                new Crate(this, keyH, 100, 600),
+                new Crate(this, keyH, 400, 200),
                 new Lava(this, keyH),
                 new NPC(this, keyH, "NPC", new String[]{"Hello", "my friend", "What's up?", "have you already done your homework?"}, 5),
-                new Player(this, keyH),
-                new Player2(this, keyH)
+                new Spike(this, keyH, 500, 100, lever),
+                new Ein_Etwas(this, 900,200, 180, lever2),
+                new Player(this, keyH,100,300),
+                new Player2(this, keyH,100,400)
         );
     }
 
@@ -96,8 +102,8 @@ public class GamePanel extends JPanel implements Runnable{
         gameManager.update();
         typeWriter.update();
 
-        for (Entity e : entities){
-            e.update();
+        for (int i = 0; i < entities.size(); i++){
+            entities.get(i).update();
         }
 
         //Collision Controller
