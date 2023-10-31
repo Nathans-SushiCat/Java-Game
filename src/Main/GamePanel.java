@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
 
-        typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.3"}, 4);
+        typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.4"}, 4);
 
         Lever lever = new Lever(this,keyH, 250,100, Lever_Handle.State.LEFT);
         Lever lever2 = new Lever(this, keyH, 250, 450, Lever_Handle.State.RIGHT);
@@ -64,8 +64,9 @@ public class GamePanel extends JPanel implements Runnable{
                 new Spike(this, keyH, 500, 100, lever),
                 new Portal(this,1000,200, portal2),
                 new Ein_Etwas(this, 900,200, 180, lever2),
-                new Player(this, keyH,100,300),
-                new Player2(this, keyH,100,400)
+                new Player(this, keyH,100,300, 1),
+                new Player(this, keyH,100,400, 2),
+                new Dingeldodel(this, 400,600, 4)
         );
     }
 

@@ -12,6 +12,7 @@ import java.io.IOException;
 public class Player extends Entity {
     KeyHandler keyH;
     BufferedImage Heart, HeartHalf, HeartEmpty;
+    int playerIndex;
 
     int immunityTimer;
 
@@ -19,14 +20,19 @@ public class Player extends Entity {
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
-        setDefaultValues();
         getPlayerImage();
+        setDefaultValues();
+        playerIndex = 0;
     }
-    public Player(GamePanel gp, KeyHandler keyH, int x, int y){
+    public Player(GamePanel gp, KeyHandler keyH, int x, int y, int playerIndex){
         this.gp = gp;
         this.keyH = keyH;
+        if(playerIndex == 1)
+            getPlayerImage();
+        else
+            getPlayer2Image();
         setDefaultValues();
-        getPlayerImage();
+        this.playerIndex = playerIndex;
         this.x = x;
         this.y = y;
     }
@@ -34,9 +40,9 @@ public class Player extends Entity {
         x = 100;
         y = 100;
         speed = 4;
-        lifes = 6;
-
         direction = "idle";
+        hearts = new Heart[]{new Heart(Heart, HeartHalf, HeartEmpty), new Heart(Heart, HeartHalf, HeartEmpty), new Heart(Heart, HeartHalf, HeartEmpty)};
+        lifes = hearts.length*2;
         solid = true;
     }
 
@@ -60,33 +66,78 @@ public class Player extends Entity {
         }catch (IOException e){
             e.printStackTrace();
         }
-        hearts = new Heart[]{new Heart(Heart, HeartHalf, HeartEmpty), new Heart(Heart, HeartHalf, HeartEmpty), new Heart(Heart, HeartHalf, HeartEmpty)};
+    }
 
+    public void getPlayer2Image(){
+        try{
+            up1 = ImageIO.read(getClass().getResourceAsStream("/Resources/player2/player2-up-1.png"));
+            up2 = ImageIO.read(getClass().getResourceAsStream("/Resources/player2/player2-up-2.png"));
+            down1 = ImageIO.read(getClass().getResourceAsStream("/Resources/player2/player2-down-1.png"));
+            down2 = ImageIO.read(getClass().getResourceAsStream("/Resources/player2/player2-down-2.png"));
+            right1 = ImageIO.read(getClass().getResourceAsStream("/Resources/player2/player2-right-1.png"));
+            right2 = ImageIO.read(getClass().getResourceAsStream("/Resources/player2/player2-right-2.png"));
+            left1 = ImageIO.read(getClass().getResourceAsStream("/Resources/player2/player2-left-1.png"));
+            left2 = ImageIO.read(getClass().getResourceAsStream("/Resources/player2/player2-left-2.png"));
+            idle1 = ImageIO.read(getClass().getResourceAsStream("/Resources/player2/player2-1.png"));
+            idle2 = ImageIO.read(getClass().getResourceAsStream("/Resources/player2/player2-2.png"));
+
+            Heart = ImageIO.read(getClass().getResourceAsStream("/Resources/Hearts/HeartRed.png"));
+            HeartHalf = ImageIO.read(getClass().getResourceAsStream("/Resources/Hearts/HeartRedHalf.png"));
+            HeartEmpty = ImageIO.read(getClass().getResourceAsStream("/Resources/Hearts/HeartEmpty.png"));
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
     @Override
     public void update(){
 
+
         //Key Inputs
-        if(keyH.upPressed && !LockY_P){
-            direction = "up";
-            y -= speed;
-        }
-        if(keyH.downPressed && !LockY_N){
-            direction = "down";
-            y += speed;
-        }
-        if(keyH.rightPressed && !LockX_P){
-            direction = "right";
-            x += speed;
-        }
-        if(keyH.leftPressed && !LockX_N){
-            direction = "left";
-            x -= speed;
+        if(playerIndex == 1){
+            if(keyH.upPressed && !LockY_P){
+                direction = "up";
+                y -= speed;
+            }
+            if(keyH.downPressed && !LockY_N){
+                direction = "down";
+                y += speed;
+            }
+            if(keyH.rightPressed && !LockX_P){
+                direction = "right";
+                x += speed;
+            }
+            if(keyH.leftPressed && !LockX_N){
+                direction = "left";
+                x -= speed;
+            }
+            if(!(keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed)){
+                direction = "idle";
+            }
+        }else {
+            //Key Inputs
+            if(keyH.upPressed2 && !LockY_P){
+                direction = "up";
+                y -= speed;
+            }
+            if(keyH.downPressed2 && !LockY_N){
+                direction = "down";
+                y += speed;
+            }
+            if(keyH.rightPressed2 && !LockX_P){
+                direction = "right";
+                x += speed;
+            }
+            if(keyH.leftPressed2 && !LockX_N){
+                direction = "left";
+                x -= speed;
+            }
+
+            if(!(keyH.upPressed2 || keyH.downPressed2 || keyH.rightPressed2 || keyH.leftPressed2)){
+                direction = "idle";
+            }
         }
 
-        if(!(keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed)){
-            direction = "idle";
-        }
 
         spriteCounter ++;
         int animationspeed = 10;
@@ -191,11 +242,19 @@ public class Player extends Entity {
                 }
         }
         int size = GamePanel.tileSize;
-        g2.drawString("Sushicat", x+(gp.tileSize/2)-(g2.getFontMetrics().stringWidth("Sushicat")/2), y-5);
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
 
-        for(int i = 0; i < hearts.length; i++){
-            g2.drawImage(hearts[i].image, 10 + (size/2)*i,10,size/2, size/2, null);
+        g2.drawImage(image, x, y, size, size, null);
+
+        if(playerIndex == 1){
+            g2.drawString("Sushicat", x+(size/2)-(g2.getFontMetrics().stringWidth("Sushicat")/2), y-5);
+            for(int i = 0; i < hearts.length; i++){
+                g2.drawImage(hearts[i].image, 10 + (size/2)*i,10,size/2, size/2, null);
+            }
+        }else {
+            g2.drawString("Schmillizidado", x+(size/2)-(g2.getFontMetrics().stringWidth("Schmillizidado")/2), y-5);
+            for(int i = 0; i < hearts.length; i++){
+                g2.drawImage(hearts[i].image, 10 + (size/2)*i,15+ size/2,size/2, size/2, null);
+            }
         }
     }
 }

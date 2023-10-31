@@ -1,8 +1,5 @@
 package OLD;
 
-import entity.Player;
-import entity.Player2;
-
 public class ObjectHelper {
     /*
     public float distancetoObject(float x1, float y1, float x2, float y2){

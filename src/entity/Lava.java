@@ -48,16 +48,11 @@ public class Lava extends Entity{
     @Override
     public void handleCollision(Collision collision) {
         if(collision.hasCollided()) {
-            if(collision.collidedEntity instanceof Player){
-                Player e = (Player) collision.collidedEntity;
+            if(collision.collidedEntity instanceof Player player){
+                player.removeLife();
 
-                e.removeLife();
-
-            }else if(collision.collidedEntity instanceof Player2){
-                Player2 e = (Player2) collision.collidedEntity;
-
-                e.removeLife();
             }
+            collision.collidedEntity.removeLife();
         }
     }
 

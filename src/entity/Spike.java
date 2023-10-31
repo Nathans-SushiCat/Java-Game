@@ -92,11 +92,9 @@ public class Spike extends Entity{
                 return;
             if(collision.collidedEntity instanceof Player player){
                 player.removeLife();
+                return;
             }
-            if(collision.collidedEntity instanceof Player2 player){
-                player.removeLife();
-            }
-
+            collision.collidedEntity.removeLife();
         }
     }
 

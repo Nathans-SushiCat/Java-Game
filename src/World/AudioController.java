@@ -48,5 +48,7 @@ public class AudioController {
     public static void playShootSound(){
         playSound("Shoot.wav");
     }
-
+    public static void playHurtDingeldodelSound(){
+        playSound("HurtDingeldodel.wav");
+    }
 }

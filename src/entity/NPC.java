@@ -54,7 +54,7 @@ public class NPC extends Entity{
             if(!collision.collidedEntity.solid)
                 return;
 
-            if(collision.collidedEntity instanceof Player || collision.collidedEntity instanceof Player2){
+            if(collision.collidedEntity instanceof Player){
                 if(writer.finished){
                     writer.changeText(texts[currentTextIndex]);
                     if(currentTextIndex+1 < texts.length)

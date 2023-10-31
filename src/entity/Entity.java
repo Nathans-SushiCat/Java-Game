@@ -3,10 +3,13 @@ package entity;
 import Main.Collidable;
 import Main.Collision;
 import Main.GamePanel;
+import World.AudioController;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import static World.AudioController.playHurtDingeldodelSound;
 
 public class Entity implements Collidable {
     public int x;
@@ -15,6 +18,18 @@ public class Entity implements Collidable {
     public boolean solid;
 
     public int lifes;
+
+    int immunityTimer = 0;
+
+    public void removeLife(){
+        if(immunityTimer == 0) {
+            immunityTimer = 60;
+            lifes--;
+            playHurtDingeldodelSound();
+            AudioController.playHurtSound();
+            return;
+        }
+    }
     public ArrayList<Collision> collisions = new ArrayList<Collision>();
     public boolean LockX_P = false, LockX_N = false, LockY_P = false, LockY_N = false;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, idle1, idle2;

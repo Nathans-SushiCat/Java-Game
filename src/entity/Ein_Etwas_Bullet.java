@@ -65,12 +65,6 @@ public class Ein_Etwas_Bullet extends Entity{
                 return;
             }
 
-            if(collision.collidedEntity instanceof Player2 player2){
-                player2.removeLifeIgnoreImunity();
-                gp.entities.remove(this);
-                return;
-            }
-
             if(parent == null || collision.collidedEntity != parent){
                 gp.entities.remove(this);
                 AudioController.playHitSound();
