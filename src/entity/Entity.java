@@ -60,6 +60,25 @@ public class Entity implements Collidable {
         }
         return (float) Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
     }
+    public float distancetoPos(int distX, int distY){
+        float x1,x2,y1,y2;
+        x1 = x;
+        y1 = y;
+        x2 = distX;
+        y2 = distY;
+        float deltaX, deltaY;
+        if(x1 < x2){
+            deltaX = x2-x1;
+        }else{
+            deltaX = x1-x2;
+        }
+        if(y1 < y2){
+            deltaY = y2-y1;
+        }else{
+            deltaY = y1-y2;
+        }
+        return (float) Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
+    }
 
     @Override
     public Collision createCollisionWith(Collidable other) {

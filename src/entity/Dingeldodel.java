@@ -1,5 +1,6 @@
 package entity;
 
+import Main.Collidable;
 import Main.Collision;
 import Main.GamePanel;
 import Main.KeyHandler;
@@ -99,7 +100,6 @@ public class Dingeldodel extends Entity{
         }
 
 
-
         if(currentPlayer != null && distancetoObject(this, currentPlayer) < GamePanel.tileSize*4){
             moving = true;
             moveTowards(currentPlayer);
@@ -111,7 +111,6 @@ public class Dingeldodel extends Entity{
     }
 
     public void moveTowards(Entity target) {
-        System.out.println("MOVING");
         if(currentPlayer.lifes == 0){
             moving = false;
             currentPlayer = null;

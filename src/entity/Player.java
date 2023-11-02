@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Player extends Entity {
     KeyHandler keyH;
@@ -16,7 +17,7 @@ public class Player extends Entity {
 
     int immunityTimer;
 
-    Heart[] hearts;
+    ArrayList<Heart> hearts = new ArrayList<Heart>();
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
@@ -41,9 +42,13 @@ public class Player extends Entity {
         y = 100;
         speed = 4;
         direction = "idle";
-        hearts = new Heart[]{new Heart(Heart, HeartHalf, HeartEmpty), new Heart(Heart, HeartHalf, HeartEmpty), new Heart(Heart, HeartHalf, HeartEmpty)};
-        lifes = hearts.length*2;
+        for(int i = 0; i < 3; i ++)
+            addHeart();
+        lifes = hearts.size()*2;
         solid = true;
+    }
+    public void addHeart(){
+        hearts.add(new Heart(Heart, HeartHalf, HeartEmpty));
     }
 
     public void getPlayerImage(){
@@ -158,10 +163,10 @@ public class Player extends Entity {
     }
 
     public void removeLife(){
-        for(int i = hearts.length-1; i >= 0; i--) {
+        for(int i = hearts.size()-1; i >= 0; i--) {
             if(immunityTimer == 0){
-                if(hearts[i].getLifes() >= 1){
-                    hearts[i].removeLife();
+                if(hearts.get(i).getLifes() >= 1){
+                    hearts.get(i).removeLife();
                     immunityTimer = 60;
                     lifes--;
                     if(lifes == 0){
@@ -174,9 +179,9 @@ public class Player extends Entity {
         }
     }
     public void removeLifeIgnoreImunity(){
-        for(int i = hearts.length-1; i >= 0; i--) {
-            if (hearts[i].getLifes() >= 1) {
-                hearts[i].removeLife();
+        for(int i = hearts.size()-1; i >= 0; i--) {
+            if (hearts.get(i).getLifes() >= 1) {
+                hearts.get(i).removeLife();
                 lifes--;
                 if (lifes == 0) {
                     gp.entities.remove(this);
@@ -187,9 +192,9 @@ public class Player extends Entity {
         }
     }
     public void addLife(){
-        for(int i = 0; i < hearts.length; i++){
-            if(hearts[i].getLifes() < 2){
-                hearts[i].addLife();
+        for(int i = 0; i < hearts.size(); i++){
+            if(hearts.get(i).getLifes() < 2){
+                hearts.get(i).addLife();
                 lifes++;
                 return;
             }
@@ -247,13 +252,13 @@ public class Player extends Entity {
 
         if(playerIndex == 1){
             g2.drawString("Sushicat", x+(size/2)-(g2.getFontMetrics().stringWidth("Sushicat")/2), y-5);
-            for(int i = 0; i < hearts.length; i++){
-                g2.drawImage(hearts[i].image, 10 + (size/2)*i,10,size/2, size/2, null);
+            for(int i = 0; i < hearts.size(); i++){
+                g2.drawImage(hearts.get(i).image, 10 + (size/2)*i,10,size/2, size/2, null);
             }
         }else {
             g2.drawString("Schmillizidado", x+(size/2)-(g2.getFontMetrics().stringWidth("Schmillizidado")/2), y-5);
-            for(int i = 0; i < hearts.length; i++){
-                g2.drawImage(hearts[i].image, 10 + (size/2)*i,15+ size/2,size/2, size/2, null);
+            for(int i = 0; i < hearts.size(); i++){
+                g2.drawImage(hearts.get(i).image, 10 + (size/2)*i,15+ size/2,size/2, size/2, null);
             }
         }
     }
