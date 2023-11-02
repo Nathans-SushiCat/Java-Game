@@ -24,6 +24,8 @@ public class Dingeldodel extends Entity{
     int LastFrameXpos;
     int LastFrameYpos;
 
+    HealthBar healthBar;
+
     public Dingeldodel(GamePanel gp, int x, int y, int speed){
         this.gp = gp;
         getSprites();
@@ -32,6 +34,7 @@ public class Dingeldodel extends Entity{
         solid = true;
         this.speed = speed;
         lifes = 3;
+        healthBar = new HealthBar( gp,this);
     }
 
 
@@ -60,6 +63,7 @@ public class Dingeldodel extends Entity{
 
     @Override
     public void update(){
+        healthBar.update();
         spriteCounter ++;
         int animationspeed;
         if(!moving)
@@ -150,6 +154,8 @@ public class Dingeldodel extends Entity{
 
     @Override
     public void draw(Graphics2D g2){
+        healthBar.draw(g2);
+
         BufferedImage image = null;
         BufferedImage imageMouth = null;
 

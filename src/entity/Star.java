@@ -14,6 +14,7 @@ public class Star extends Entity{
     private int startX;
     private int startY;
     private int radius;
+    HealthBar healthBar;
 
     public Star(GamePanel gp, int x, int y, int speed, int radius){
         this.gp = gp;
@@ -26,6 +27,7 @@ public class Star extends Entity{
         this.radius = radius;
         startX = x;
         startY = y;
+        healthBar = new HealthBar(gp,  this);
     }
 
 
@@ -40,6 +42,11 @@ public class Star extends Entity{
 
     @Override
     public void update(){
+
+        healthBar.update();
+
+        if(immunityTimer > 0)
+            immunityTimer--;
 
         if(lifes <= 0){
                 gp.entities.remove(this);
@@ -69,6 +76,8 @@ public class Star extends Entity{
             spriteCounter = 0;
         }
 
+
+        //Move away from Player
         boolean moving = false;
         if(p1 != null && distancetoObject(this,p1) < radius*GamePanel.tileSize){
             moveAgainst(p1);
@@ -79,8 +88,8 @@ public class Star extends Entity{
             moving = true;
         }
 
-
-        if(!moving && distancetoObject(this,p2) > (radius+1)*GamePanel.tileSize && distancetoObject(this,p1) > (radius+1)*GamePanel.tileSize){
+        //Walk back to start pos logic
+        if ((distancetoObject(this, p1) < (radius+1)*GamePanel.tileSize ? ((x < p1.x && x > startX) || (x > p1.x && x < startX)) : true) && (distancetoObject(this, p2) < (radius+1)*GamePanel.tileSize ? ((x < p2.x && x > startX) || (x > p2.x && x < startX)) : true)) {
             if(distancetoPos(startX,startY) > speed)
                 moveTowards(startX, startY);
         }
@@ -126,6 +135,8 @@ public class Star extends Entity{
 
     @Override
     public void draw(Graphics2D g2){
+        healthBar.draw(g2);
+
         BufferedImage image;
 
         if(spriteNum == 1){
@@ -134,6 +145,7 @@ public class Star extends Entity{
             image = idle2;
         }
         g2.drawImage(image, x,y,GamePanel.tileSize, GamePanel.tileSize, null);
+
     }
 
     @Override

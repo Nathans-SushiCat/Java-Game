@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
 
-        typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.4.1"}, 4);
+        typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.4.2"}, 4);
 
         Lever lever = new Lever(this,keyH, 250,100, Lever_Handle.State.LEFT);
         Lever lever2 = new Lever(this, keyH, 250, 450, Lever_Handle.State.RIGHT);
