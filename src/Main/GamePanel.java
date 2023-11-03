@@ -62,13 +62,17 @@ public class GamePanel extends JPanel implements Runnable{
                 new Lava(this, keyH),
                 new NPC(this, keyH, "NPC", new String[]{"Hello", "my friend", "What's up?", "have you already done your homework?"}, 5),
                 new Spike(this, keyH, 500, 100, lever),
-                new Portal(this,1000,200, portal2),
+                new Portal(this,1000,200, portal2, 2),
                 new Ein_Etwas(this, 900,200, 180, lever2),
                 new Player(this, keyH,100,300, 1),
                 new Player(this, keyH,100,400, 2),
+                new PortalGun(this, keyH, 100, 600),
                 new Star(this,800,600, 5, 4),
                 new Dingeldodel(this, 400,600, 4)
         );
+    }
+    public boolean objectExists(Entity e){
+        return entities.contains(e);
     }
 
     @Override

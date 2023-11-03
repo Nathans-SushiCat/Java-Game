@@ -8,7 +8,7 @@ public class KeyHandler implements KeyListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, actionPressed;
     public boolean upPressed2, downPressed2, leftPressed2, rightPressed2, actionPressed2;
 
-    public boolean esc, F11, space;
+    public boolean esc, F11, space, shift;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -29,7 +29,9 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_SPACE){
             space = true;
         }
-
+        if(code == KeyEvent.VK_SHIFT){
+            shift = true;
+        }
         ///Walk
         if(code == KeyEvent.VK_W){
             upPressed = true;
@@ -83,6 +85,9 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_SPACE){
             space = false;
+        }
+        if(code == KeyEvent.VK_SHIFT){
+            shift = false;
         }
 
         //Walking

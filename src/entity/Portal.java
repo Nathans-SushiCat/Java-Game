@@ -21,12 +21,18 @@ public class Portal extends Entity {
         this.x = x;
         this.y = y;
         solid = false;
-
+        teleportable = false;
     }
 
-    public Portal(GamePanel gp, int x, int y, Portal connectedPortal) {
+    public Portal(GamePanel gp, int x, int y, Portal connectedPortal, int spriteType) {
         this.gp = gp;
-        getSprites();
+        if(spriteType == 1)
+            getSprites();
+        else
+            getSprites2();
+
+        teleportable = false;
+
         this.x = x;
         this.y = y;
         solid = false;
@@ -40,6 +46,14 @@ public class Portal extends Entity {
         try {
             idle1 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/Portal_1.png"));
             idle2 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/Portal_2.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void getSprites2() {
+        try {
+            idle1 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/Portal_1-Two.png"));
+            idle2 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/Portal_2-Two.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,7 +111,7 @@ public class Portal extends Entity {
     @Override
     public void handleCollision(Collision collision) {
 
-        if (!collision.hasCollided() || !collision.collidedEntity.solid || collision.collidedEntity instanceof Portal)
+        if (!collision.hasCollided() || !collision.collidedEntity.solid || !collision.collidedEntity.teleportable)
             return;
 
         Entity e = collision.collidedEntity;

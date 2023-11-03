@@ -40,6 +40,7 @@ public class Entity implements Collidable {
     public int sizeHorizontal = GamePanel.tileSize;;
     public int spriteCounter = 0;
     public int spriteNum = 1;
+    public boolean teleportable = true;
 
     public float distancetoObject(Entity object1, Entity object2){
         float x1,x2,y1,y2;
@@ -125,8 +126,6 @@ public class Entity implements Collidable {
 
     @Override
     public void handleCollision(Collision collision) {
-
-
         // Handle the collision, e.g., change the object's state
         if ( collision.hasCollided()) {
             if(!collision.collidedEntity.solid)

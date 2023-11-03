@@ -28,12 +28,14 @@ public class Lever_Handle extends Entity{
         this.sizeVertical = 10 * GamePanel.scale;
         this.sizeHorizontal = 2 * GamePanel.scale;
         getSprite();
+        teleportable = false;
     }
     public Lever_Handle(GamePanel gp, KeyHandler keyH, int x, int y, State state, Lever lever){
         this.gp = gp;
         this.keyH = keyH;
         solid = true;
         this.currentState = state;
+        teleportable = false;
 
         if(state == State.LEFT){
             this.x = x-GamePanel.tileSize/4;

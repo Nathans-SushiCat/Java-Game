@@ -110,8 +110,23 @@ public class Star extends Entity{
         }
 
         // Move towards the target with the specified speed
-        x += (int)(-directionX * speed);
-        y += (int)(-directionY * speed);
+        int addToX = (int)(-directionX * speed);
+        int addToY = (int)(-directionY * speed);
+
+        if(!LockY_P && addToY > 0){
+            y += addToY;
+        }
+
+        if(!LockY_N && addToY < 0){
+            y += addToY;
+        }
+        if(!LockX_P && addToX > 0){
+            x += addToX;
+        }
+
+        if(!LockX_N && addToX < 0){
+            x += addToX;
+        }
     }
 
     public void moveTowards(int targetX, int targetY) {
@@ -150,6 +165,8 @@ public class Star extends Entity{
 
     @Override
     public void handleCollision(Collision collision) {
+        super.handleCollision(collision);
+
         if ( collision.hasCollided()) {
             if(collision.collidedEntity instanceof Ein_Etwas_Bullet)
                 lifes--;
