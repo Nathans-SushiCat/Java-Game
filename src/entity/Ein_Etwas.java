@@ -48,11 +48,6 @@ public class Ein_Etwas extends Entity{
     @Override
     public void update(){
 
-
-
-
-
-
         if( connectedLever != null && connectedLever.leverHandle.currentState == Lever_Handle.State.RIGHT)
             active = true;
         if( connectedLever != null && connectedLever.leverHandle.currentState == Lever_Handle.State.LEFT)

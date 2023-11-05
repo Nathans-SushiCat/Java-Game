@@ -16,8 +16,11 @@ public class Entity implements Collidable {
     public int y;
     public int speed;
     public boolean solid;
+    boolean hostile = false;
+    boolean moving = false;
+    Entity angryAt;
 
-    public int lifes;
+    public int lifes = 0;
 
     int immunityTimer = 0;
 
@@ -25,8 +28,21 @@ public class Entity implements Collidable {
         if(immunityTimer == 0) {
             immunityTimer = 60;
             lifes--;
-            playHurtDingeldodelSound();
             AudioController.playHurtSound();
+            if (lifes == 0) {
+                gp.entities.remove(this);
+            }
+            //AudioController.playHurtDingeldodelSound();
+            return;
+        }
+    }
+    public void removeLifeIgnoreImunity(){
+        if (lifes >= 1) {
+            lifes--;
+            AudioController.playHurtSound();
+            if (lifes == 0) {
+                gp.entities.remove(this);
+            }
             return;
         }
     }
@@ -81,6 +97,39 @@ public class Entity implements Collidable {
         return (float) Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
     }
 
+    public void moveTowards(int targetX, int targetY) {
+        moving = true;
+        // Calculate the direction vector from your position to the target
+        double directionX = targetX - x;
+        double directionY = targetY - y;
+
+        // Calculate the distance between you and the target
+        double distance = Math.sqrt(directionX * directionX + directionY * directionY);
+
+        // Normalize the direction vector (make it a unit vector)
+        if (distance > 0) {
+            directionX /= distance;
+            directionY /= distance;
+        }
+
+        if(distance < speed)
+            return;
+        // Move towards the target with the specified speed
+        if(!LockY_P && directionY > 0){
+            y += (int)(directionY * speed);
+        }
+        if(!LockY_N && directionY < 0){
+            y += (int)(directionY * speed);
+        }
+        if(!LockX_P && directionX > 0){
+            x += (int)(directionX * speed);
+        }
+
+        if(!LockX_N && directionX < 0){
+            x += (int)(directionX * speed);
+        }
+    }
+
     @Override
     public Collision createCollisionWith(Collidable other) {
         if (other instanceof Entity) {
@@ -130,6 +179,45 @@ public class Entity implements Collidable {
         if ( collision.hasCollided()) {
             if(!collision.collidedEntity.solid)
                 return;
+            // Handle the collision direction
+            switch (collision.getDirection()) {
+                case TOP:
+                    LockY_N = true;
+                    break;
+                case RIGHT:
+                    LockX_N = true;
+                    break;
+                case LEFT:
+                    LockX_P = true;
+                    break;
+                case DOWN:
+                    LockY_P = true;
+                    break;
+                case NONE:
+                    LockY_N = false;
+                    LockY_P = false;
+                    LockX_P = false;
+                    LockX_N = false;
+                    break;
+            }
+        }else  {
+            LockY_N = false;
+            LockY_P = false;
+            LockX_P = false;
+            LockX_N = false;
+        }
+
+    }
+
+    public void handleCollision(Collision collision, Entity ignore) {
+        // Handle the collision, e.g., change the object's state
+        if ( collision.hasCollided()) {
+            if(!collision.collidedEntity.solid)
+                return;
+
+            if(ignore != null && ignore.equals(collision.collidedEntity))
+                return;
+
             // Handle the collision direction
             switch (collision.getDirection()) {
                 case TOP:

@@ -3,6 +3,7 @@ package entity;
 import Main.Collision;
 import Main.GamePanel;
 import Main.KeyHandler;
+import World.AudioController;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,14 +18,18 @@ public class PortalGun extends Entity {
     Portal portalB;
     int currentPortal = 0;
 
+    int portalCooldown;
+    int portalCooldownTimer;
 
-    public PortalGun(GamePanel gp, KeyHandler keyHandler, int x, int y) {
+
+    public PortalGun(GamePanel gp, KeyHandler keyHandler, int x, int y, int cooldown) {
         this.x = x;
         this.y = y;
         this.gp = gp;
         solid = false;
-        sizeVertical = 5;
-        sizeHorizontal = 10;
+        sizeVertical = 5 * GamePanel.scale;
+        sizeHorizontal = 10* GamePanel.scale;
+        portalCooldown = cooldown;
         this.keyH = keyHandler;
         getSprites();
     }
@@ -57,9 +62,15 @@ public class PortalGun extends Entity {
             return;
         }
 
-        int index = 1;
-        if (connectedToEntity instanceof Player player ? ((index = player.playerIndex) == 1 ? keyH.actionPressed : keyH.actionPressed2) : false) {
 
+        int index = 1;
+
+        if(portalCooldownTimer > 0)
+            portalCooldownTimer--;
+
+        if (connectedToEntity instanceof Player player && ((index = player.playerIndex) == 1 ? keyH.actionPressed : keyH.actionPressed2) && portalCooldownTimer == 0) {
+
+            portalCooldownTimer = portalCooldown;
             currentPortal = currentPortal == 1 ? 2 : 1;
             if (portalB != null && currentPortal == 1) {
                 gp.entities.remove(portalA);
@@ -68,6 +79,7 @@ public class PortalGun extends Entity {
                 gp.entities.remove(portalB);
                 portalB = null;
             }
+            AudioController.playPortalGunSpawnSound();
 
             if (portalA == null) {
                 if(portalB != null)
@@ -112,8 +124,6 @@ public class PortalGun extends Entity {
         }else {
             g2.drawImage(image1, x +(xScale == -1 ? GamePanel.scale*10: 0 ), y+(GamePanel.scale), GamePanel.tileSize * xScale, GamePanel.tileSize, null);
         }
-
-
     }
 
     @Override
@@ -123,8 +133,10 @@ public class PortalGun extends Entity {
             return;
 
         if (collision.hasCollided()) {
-            if (collision.collidedEntity instanceof Player player)
-                    connectedToEntity = player;
+            if (collision.collidedEntity instanceof Player player){
+                connectedToEntity = player;
+                AudioController.playPortalGunPickupSound();
+            }
         }
     }
 }

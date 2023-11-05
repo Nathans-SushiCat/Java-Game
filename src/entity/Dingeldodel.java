@@ -18,9 +18,7 @@ public class Dingeldodel extends Entity{
     int mouthSpriteTime = 2;
     int mouthSpriteNum = 1;
     boolean openMouth = false;
-    Entity currentPlayer;
 
-    boolean moving = false;
     int LastFrameXpos;
     int LastFrameYpos;
 
@@ -35,6 +33,7 @@ public class Dingeldodel extends Entity{
         this.speed = speed;
         lifes = 3;
         healthBar = new HealthBar( gp,this);
+        hostile = true;
     }
 
 
@@ -64,6 +63,9 @@ public class Dingeldodel extends Entity{
     @Override
     public void update(){
         healthBar.update();
+        if(angryAt != null && !gp.objectExists(angryAt))
+            angryAt = null;
+
         spriteCounter ++;
         int animationspeed;
         if(!moving)
@@ -92,8 +94,7 @@ public class Dingeldodel extends Entity{
                 }else if(mouthSpriteNum == 4){
                     mouthSpriteNum = 1;
                     openMouth = false;
-                    if(currentPlayer instanceof Player p)
-                        p.removeLifeIgnoreImunity();
+                    angryAt.removeLifeIgnoreImunity();
                 }
                 mouthSpriteCounter = 0;
             }
@@ -104,9 +105,9 @@ public class Dingeldodel extends Entity{
         }
 
 
-        if(currentPlayer != null && distancetoObject(this, currentPlayer) < GamePanel.tileSize*4){
+        if(angryAt != null && distancetoObject(this, angryAt) < GamePanel.tileSize*4){
             moving = true;
-            moveTowards(currentPlayer);
+            moveTowards(angryAt.x, angryAt.y);
         }else
             moving = false;
 
@@ -114,41 +115,18 @@ public class Dingeldodel extends Entity{
             gp.entities.remove(this);
     }
 
-    public void moveTowards(Entity target) {
-        if(currentPlayer.lifes == 0){
-            moving = false;
-            currentPlayer = null;
-        }
-        // Calculate the direction vector from your position to the target
-        double directionX = target.x - x;
-        double directionY = target.y - y;
-
-        // Calculate the distance between you and the target
-        double distance = Math.sqrt(directionX * directionX + directionY * directionY);
-
-        // Normalize the direction vector (make it a unit vector)
-        if (distance > 0) {
-            directionX /= distance;
-            directionY /= distance;
-        }
-
-        // Move towards the target with the specified speed
-        x += (int)(directionX * speed);
-        y += (int)(directionY * speed);
-    }
-
-
     @Override
     public void handleCollision(Collision collision) {
+        super.handleCollision(collision);
         if ( collision.hasCollided()) {
             if(collision.collidedEntity instanceof Ein_Etwas_Bullet)
-                lifes--;
+                removeLife();
 
-            if (!collision.collidedEntity.solid || !(collision.collidedEntity instanceof Player))
+            if (!collision.collidedEntity.solid || collision.collidedEntity.lifes == 0)
                 return;
 
             openMouth = true;
-            currentPlayer = collision.collidedEntity;
+            angryAt = collision.collidedEntity;
         }
     }
 

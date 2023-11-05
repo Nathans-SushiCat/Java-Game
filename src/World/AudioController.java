@@ -32,7 +32,6 @@ public class AudioController {
     public static void playTypeWriterSound(){
         playSound("TypeWriter.wav");
     }
-
     public static void playPushLeverSound(){
         playSound("PushLever.wav");
     }
@@ -51,4 +50,23 @@ public class AudioController {
     public static void playHurtDingeldodelSound(){
         playSound("HurtDingeldodel.wav");
     }
+    public static void playPortalGunSpawnSound(){
+        playSound("PortalGunSpawn.wav");
+    }
+    public static void playPortalGunPickupSound(){
+        playSound("PortalGunPickup.wav");
+    }
+    public static void playTeleportSound(){
+        playSound("Teleport.wav");
+    }
+    public static void playHealSound(){
+        playSound("Heal.wav");
+    }
+    public static void playSushiEatSound(){
+        playSound("Sushi.wav");
+    }
+    public static void playCatSound(){
+        playSound("Cat.wav");
+    }
+
 }

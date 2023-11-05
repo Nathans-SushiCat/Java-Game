@@ -2,6 +2,7 @@ package entity;
 
 import Main.Collision;
 import Main.GamePanel;
+import World.AudioController;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -42,6 +43,10 @@ public class Star extends Entity{
 
     @Override
     public void update(){
+        if(!gp.objectExists(p1))
+            p1 = null;
+        if(!gp.objectExists(p2))
+            p1 = null;
 
         healthBar.update();
 
@@ -129,25 +134,6 @@ public class Star extends Entity{
         }
     }
 
-    public void moveTowards(int targetX, int targetY) {
-        // Calculate the direction vector from your position to the target
-        double directionX = targetX - x;
-        double directionY = targetY - y;
-
-        // Calculate the distance between you and the target
-        double distance = Math.sqrt(directionX * directionX + directionY * directionY);
-
-        // Normalize the direction vector (make it a unit vector)
-        if (distance > 0) {
-            directionX /= distance;
-            directionY /= distance;
-        }
-
-        // Move towards the target with the specified speed
-        x += (int)(directionX * speed);
-        y += (int)(directionY * speed);
-    }
-
     @Override
     public void draw(Graphics2D g2){
         healthBar.draw(g2);
@@ -160,7 +146,6 @@ public class Star extends Entity{
             image = idle2;
         }
         g2.drawImage(image, x,y,GamePanel.tileSize, GamePanel.tileSize, null);
-
     }
 
     @Override
@@ -169,15 +154,15 @@ public class Star extends Entity{
 
         if ( collision.hasCollided()) {
             if(collision.collidedEntity instanceof Ein_Etwas_Bullet)
-                lifes--;
+                removeLife();
 
             if (!collision.collidedEntity.solid)
                 return;
 
             if(collision.collidedEntity instanceof Player player){
+                AudioController.playHealSound();
                 while(player.lifes < player.hearts.size()*2)
                     player.addLife();
-                System.out.println(player.lifes);
                 gp.entities.remove(this);
             }
         }

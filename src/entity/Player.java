@@ -162,6 +162,7 @@ public class Player extends Entity {
         }
     }
 
+    @Override
     public void removeLife(){
         for(int i = hearts.size()-1; i >= 0; i--) {
             if(immunityTimer == 0){
@@ -178,6 +179,7 @@ public class Player extends Entity {
             }
         }
     }
+    @Override
     public void removeLifeIgnoreImunity(){
         for(int i = hearts.size()-1; i >= 0; i--) {
             if (hearts.get(i).getLifes() >= 1) {

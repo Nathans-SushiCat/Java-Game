@@ -2,6 +2,8 @@ package entity;
 
 import Main.Collision;
 import Main.GamePanel;
+import World.AudioController;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -65,7 +67,6 @@ public class Portal extends Entity {
         spriteCounter ++;
         int animationspeed = 5;
 
-
         if(spriteCounter > animationspeed){
             if(spriteNum == 1){
                 spriteNum = 2;
@@ -128,6 +129,7 @@ public class Portal extends Entity {
         e.x = connectedPortal.x+Xoffset;
         e.y = connectedPortal.y+Yoffset;
         connectedPortal.touchedEntitys.add(e);
-
+        if(e instanceof Player)
+            AudioController.playTeleportSound();
     }
 }

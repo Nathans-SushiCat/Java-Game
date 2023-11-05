@@ -44,29 +44,30 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
 
-        typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.4.2"}, 4);
+        typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.5"}, 4);
 
         Lever lever = new Lever(this,keyH, 250,100, Lever_Handle.State.LEFT);
         Lever lever2 = new Lever(this, keyH, 250, 450, Lever_Handle.State.RIGHT);
-        Portal portal2 = new Portal(this,400,200);
 
 
         entities.add(lever);
         entities.add(lever2);
-        entities.add(portal2);
 
         Collections.addAll(entities,
-                new Crate(this, keyH, 200, 600),
-                new Crate(this, keyH, 100, 600),
+                new Crate(this, keyH, 400, 200),
                 new Crate(this, keyH, 400, 400),
                 new Lava(this, keyH),
                 new NPC(this, keyH, "NPC", new String[]{"Hello", "my friend", "What's up?", "have you already done your homework?"}, 5),
                 new Spike(this, keyH, 500, 100, lever),
-                new Portal(this,1000,200, portal2, 2),
+                new Spike(this, keyH, 500+tileSize, 100, lever),
+                new Spike(this, keyH, 500+2*tileSize, 100, lever),
                 new Ein_Etwas(this, 900,200, 180, lever2),
+                new Sushi(this, keyH,200, 600,1),
+                new Sushi(this, keyH,200+GamePanel.tileSize, 600,1),
+                new Cat(this, 100,500, 4),
                 new Player(this, keyH,100,300, 1),
                 new Player(this, keyH,100,400, 2),
-                new PortalGun(this, keyH, 100, 600),
+                new PortalGun(this, keyH, 100, 600, 60),
                 new Star(this,800,600, 5, 4),
                 new Dingeldodel(this, 400,600, 4)
         );
@@ -81,14 +82,11 @@ public class GamePanel extends JPanel implements Runnable{
         double drawInterval = 1000000000/FPS;
         double nextDrawTime = System.nanoTime() + drawInterval;
 
-
         while (gameThread != null){
-
             // 1 UPDATE: update information
             update();
             //2 DRAW: draw the screen
             repaint();
-
 
             //Set Game FPS
             try {
