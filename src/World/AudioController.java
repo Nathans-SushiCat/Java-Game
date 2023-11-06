@@ -1,14 +1,8 @@
 package World;
 
-import Main.Main;
-import org.w3c.dom.ls.LSOutput;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import java.io.File;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 
 public class AudioController {
     public static synchronized void playSound(final String url) {
@@ -53,7 +47,7 @@ public class AudioController {
     public static void playPortalGunSpawnSound(){
         playSound("PortalGunSpawn.wav");
     }
-    public static void playPortalGunPickupSound(){
+    public static void playPickupSound(){
         playSound("PortalGunPickup.wav");
     }
     public static void playTeleportSound(){

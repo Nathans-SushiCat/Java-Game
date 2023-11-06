@@ -47,8 +47,12 @@ public class Sushi extends Entity {
         super.handleCollision(collision);
 
 
-        if(collision.collidedEntity instanceof Cat cat){
-            cat.lifes = cat.maxLifes;
+        if(collision.collidedEntity instanceof Cat cat && !cat.fat){
+            if(cat.lifes != cat.maxLifes)
+                cat.lifes = cat.maxLifes;
+            else
+                cat.fat = true;
+
             AudioController.playSushiEatSound();
             gp.entities.remove(this);
         }

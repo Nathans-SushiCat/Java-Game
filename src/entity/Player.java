@@ -15,6 +15,7 @@ public class Player extends Entity {
     BufferedImage Heart, HeartHalf, HeartEmpty;
     int playerIndex;
 
+    Entity handItem = null;
     int immunityTimer;
 
     ArrayList<Heart> hearts = new ArrayList<Heart>();

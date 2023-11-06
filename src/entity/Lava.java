@@ -36,10 +36,26 @@ public class Lava extends Entity{
     }
 
 
+    @Override
+    public void update(){
+        spriteCounter ++;
+        int animationSpeed = 20;
+
+        if(spriteCounter > animationSpeed){
+            if(spriteNum == 1){
+                spriteNum = 2;
+            }else if(spriteNum == 2){
+                spriteNum = 1;
+            }
+            spriteCounter = 0;
+        }
+    }
 
     public void getImage(){
         try{
             image1 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/Lava.png"));
+            image2 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/Lava1.png"));
+            image3 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/Lava2.png"));
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -58,7 +74,6 @@ public class Lava extends Entity{
 
     @Override
     public void draw(Graphics2D g2){
-        g2.drawImage(image1, x, y, GamePanel.tileSize, GamePanel.tileSize, null);
-        g2.drawString("Lava", x+GamePanel.tileSize/2, y+GamePanel.tileSize/2);
+        g2.drawImage(spriteNum == 1 ? image2 : image3, x, y, GamePanel.tileSize, GamePanel.tileSize, null);
     }
 }

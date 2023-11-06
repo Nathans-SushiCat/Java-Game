@@ -17,17 +17,24 @@ public class Cat extends Entity{
     boolean angry = false;
     Player Owner;
     HealthBar healthBar;
+    BufferedImage FatIdle1, FatIdle2, FatEat1, FatEat2;
 
     int lvl = 0;
 
     int maxLifes;
+    boolean fat = false;
+    int EatingTimer = 0;
+    int EatingTime = 120;
+    int EatingWaitTimer = 0;
+    int EatingWaitTime = 180;
+    int EatIndex;
+
 
     public Cat(GamePanel gp, int x, int y, int speed){
         this.gp = gp;
         this.x = x;
         this.y = y;
         getSprites();
-        direction = "idle";
         solid = true;
         this.speed = speed;
         teleportable = true;
@@ -46,11 +53,16 @@ public class Cat extends Entity{
             idle2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Cutie-Cat-Idle2.png")));
             up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Cutie-Cat-Walk1.png")));
             up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Cutie-Cat-Walk2.png")));
+            FatEat1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Cutie-Fatty-Cat-Eat1.png")));
+            FatEat2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Cutie-Fatty-Cat-Eat2.png")));
+            FatIdle1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Cutie-Fatty-Cat2.png")));
+            FatIdle2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Cutie-Fatty-Cat2.png")));
         }catch (IOException e){
             e.printStackTrace();
         }
     }
     public void update() {
+
         healthBar.maxLifes = maxLifes;
         healthBar.update();
         if(immunityTimer > 0){
@@ -63,7 +75,7 @@ public class Cat extends Entity{
         if(Owner != null && !gp.objectExists(Owner))
             Owner = null;
 
-        if(Owner != null){
+        if(Owner != null && !fat){
             float distanceToOwner = distancetoObject(this, Owner);
             if( distanceToOwner > 3* GamePanel.tileSize)
                 moveTowards(Owner.x, Owner.y);
@@ -77,11 +89,7 @@ public class Cat extends Entity{
         }
 
         spriteCounter ++;
-        int animationSpeed;
-        if(moving)
-            animationSpeed = 15;
-        else
-            animationSpeed = 45;
+        int animationSpeed = moving ? 10 : 45;
 
         if(spriteCounter > animationSpeed){
             if(spriteNum == 1){
@@ -92,11 +100,30 @@ public class Cat extends Entity{
             spriteCounter = 0;
         }
 
+        if(fat && EatingTimer > 0){
+            EatingTimer--;
+            if(EatingTimer <= 0){
+                EatingWaitTimer = EatingTime;
+                EatIndex++;
+                if(EatIndex >= 3){
+                    fat = false;
+                    lvlUp();
+                    lifes = maxLifes;
+                }
+            }
+        }
+
+        if(fat && EatingWaitTimer >= 0){
+            EatingWaitTimer--;
+            if(EatingWaitTimer <= 0){
+                EatingTimer = EatingWaitTime;
+            }
+        }
+
 
         for (Entity e : gp.entities){
             if(angry && gp.entities.contains(angryAt) && angryAt.angryAt.equals(this))
                 break;
-
 
             if(e.angryAt != null && (e.angryAt.equals(Owner) || e.angryAt.equals(this))){
                 angryAt = e;
@@ -108,40 +135,35 @@ public class Cat extends Entity{
         }
         if(angryAt != null)
             moveTowards(angryAt.x,angryAt.y);
-
     }
 
     public void draw(Graphics2D g2){
         healthBar.draw(g2);
         BufferedImage image = null;
 
-        if(spriteNum == 1){
+        if(spriteNum == 1 && !fat){
             if(moving){
-                if(angry)
-                    image = image3;
-                else
-                    image = up1;
+                image = angry ? image3 : up1;
             }else {
-                if(angry)
-                    image = image1;
-                else
-                    image = idle1;
+                image = angry ? image1 : idle1;
             }
-        }else if(spriteNum == 2){
+        }else if(spriteNum == 2 && !fat){
             if(moving){
-                if(angry)
-                    image = image4;
-                else
-                    image = up2;
+                image = angry ? image4 : up2;
             }else {
-                if (angry)
-                    image = image2;
-                else
-                    image = idle2;
+                image = angry ? image2 : idle2;
             }
         }
+
+        if(fat){
+            if(EatingTimer == 0)
+                image = spriteNum == 1 ? FatIdle1 : FatIdle2;
+            else
+                image = spriteNum == 1 ? FatEat1 : FatEat2;
+        }
+
         g2.drawString("lvl "+ lvl, x,y-GamePanel.scale);
-        g2.drawImage(image, x,y, GamePanel.tileSize, GamePanel.tileSize, null);
+        g2.drawImage(image, x+ ((direction == "right") ? GamePanel.tileSize : 0),y, GamePanel.tileSize * ((direction == "right") ? -1 : 1), GamePanel.tileSize, null);
     }
 
     @Override
@@ -156,8 +178,7 @@ public class Cat extends Entity{
                 angryAt.angryAt = this;
                 angryAt.removeLife();
                 if(angryAt.lifes <= 0){
-                    lvl++;
-                    maxLifes++;
+                    lvlUp();
                 }
             }
 
@@ -168,5 +189,10 @@ public class Cat extends Entity{
                 }
             }
         }
+    }
+
+    public void lvlUp(){
+        lvl++;
+        maxLifes++;
     }
 }

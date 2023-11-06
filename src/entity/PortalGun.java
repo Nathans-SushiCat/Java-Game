@@ -133,9 +133,10 @@ public class PortalGun extends Entity {
             return;
 
         if (collision.hasCollided()) {
-            if (collision.collidedEntity instanceof Player player){
+            if (collision.collidedEntity instanceof Player player && player.handItem == null){
+                player.handItem = this;
                 connectedToEntity = player;
-                AudioController.playPortalGunPickupSound();
+                AudioController.playPickupSound();
             }
         }
     }

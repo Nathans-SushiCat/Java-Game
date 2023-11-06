@@ -94,7 +94,7 @@ public class Star extends Entity{
         }
 
         //Walk back to start pos logic
-        if ((distancetoObject(this, p1) < (radius+1)*GamePanel.tileSize ? ((x < p1.x && x > startX) || (x > p1.x && x < startX)) : true) && (distancetoObject(this, p2) < (radius+1)*GamePanel.tileSize ? ((x < p2.x && x > startX) || (x > p2.x && x < startX)) : true)) {
+        if (( p1 != null && distancetoObject(this, p1) < (radius+1)*GamePanel.tileSize ? ((x < p1.x && x > startX) || (x > p1.x && x < startX)) : true) && (distancetoObject(this, p2) < (radius+1)*GamePanel.tileSize ? ((x < p2.x && x > startX) || (x > p2.x && x < startX)) : true)) {
             if(distancetoPos(startX,startY) > speed)
                 moveTowards(startX, startY);
         }

@@ -60,6 +60,9 @@ public class Entity implements Collidable {
 
     public float distancetoObject(Entity object1, Entity object2){
         float x1,x2,y1,y2;
+        if(object1 == null || object2 == null)
+            return 0;
+
         x1 = object1.x;
         y1 = object1.y;
         x2 = object2.x;
@@ -112,21 +115,30 @@ public class Entity implements Collidable {
             directionY /= distance;
         }
 
-        if(distance < speed)
+        if(distance < speed){
+            direction = "idle";
             return;
+        }
         // Move towards the target with the specified speed
         if(!LockY_P && directionY > 0){
             y += (int)(directionY * speed);
+            direction = "up";
         }
-        if(!LockY_N && directionY < 0){
+        else if(!LockY_N && directionY < 0){
             y += (int)(directionY * speed);
+            direction = "down";
+        }else {
+            direction = "idle";
         }
         if(!LockX_P && directionX > 0){
             x += (int)(directionX * speed);
+            direction = "right";
         }
-
-        if(!LockX_N && directionX < 0){
+        else if(!LockX_N && directionX < 0){
             x += (int)(directionX * speed);
+            direction = "left";
+        }else {
+            direction = "idle";
         }
     }
 
@@ -167,6 +179,7 @@ public class Entity implements Collidable {
     }
 
     public void update(){
+
     }
 
     public void draw(Graphics2D g2){

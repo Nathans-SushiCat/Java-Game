@@ -22,7 +22,6 @@ public class GamePanel extends JPanel implements Runnable{
     final int screenHeight = tileSize * maxScreenRow;
     int FPS = 60;
 
-
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
 
@@ -49,14 +48,18 @@ public class GamePanel extends JPanel implements Runnable{
         Lever lever = new Lever(this,keyH, 250,100, Lever_Handle.State.LEFT);
         Lever lever2 = new Lever(this, keyH, 250, 450, Lever_Handle.State.RIGHT);
 
-
         entities.add(lever);
         entities.add(lever2);
 
         Collections.addAll(entities,
                 new Crate(this, keyH, 400, 200),
                 new Crate(this, keyH, 400, 400),
-                new Lava(this, keyH),
+                new Lava(this, keyH, GamePanel.tileSize*14,30),
+                new Lava(this, keyH, GamePanel.tileSize*14,30),
+                new Lava(this, keyH, (int) (GamePanel.tileSize*14.5),30),
+                new Lava(this, keyH, (int) (GamePanel.tileSize*14.5),50),
+                new Lava(this, keyH, GamePanel.tileSize*15,20),
+                new Lava(this, keyH, GamePanel.tileSize*15,50),
                 new NPC(this, keyH, "NPC", new String[]{"Hello", "my friend", "What's up?", "have you already done your homework?"}, 5),
                 new Spike(this, keyH, 500, 100, lever),
                 new Spike(this, keyH, 500+tileSize, 100, lever),
@@ -65,11 +68,12 @@ public class GamePanel extends JPanel implements Runnable{
                 new Sushi(this, keyH,200, 600,1),
                 new Sushi(this, keyH,200+GamePanel.tileSize, 600,1),
                 new Cat(this, 100,500, 4),
-                new Player(this, keyH,100,300, 1),
                 new Player(this, keyH,100,400, 2),
+                new Player(this, keyH,100,300, 1),
                 new PortalGun(this, keyH, 100, 600, 60),
-                new Star(this,800,600, 5, 4),
-                new Dingeldodel(this, 400,600, 4)
+                new Sword(this, keyH, 200, 400, 30),
+                new Star(this,900,600, 5, 4),
+                new Dingeldodel(this, 750,600, 4)
         );
     }
     public boolean objectExists(Entity e){

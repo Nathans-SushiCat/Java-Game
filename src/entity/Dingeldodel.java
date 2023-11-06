@@ -82,7 +82,7 @@ public class Dingeldodel extends Entity{
             spriteCounter = 0;
         }
 
-        if(openMouth){
+        if(openMouth && angryAt != null){
             mouthSpriteCounter++;
             if(mouthSpriteCounter > mouthSpriteTime){
                 if(mouthSpriteNum == 1){
