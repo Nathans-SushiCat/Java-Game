@@ -5,10 +5,10 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, actionPressed;
-    public boolean upPressed2, downPressed2, leftPressed2, rightPressed2, actionPressed2;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, actionPressed, dropPressed;
+    public boolean upPressed2, downPressed2, leftPressed2, rightPressed2, actionPressed2, dropPressed2;
 
-    public boolean esc, F11, space, shift;
+    public boolean esc, F11, space;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -29,9 +29,7 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_SPACE){
             space = true;
         }
-        if(code == KeyEvent.VK_SHIFT){
-            shift = true;
-        }
+
         ///Walk
         if(code == KeyEvent.VK_W){
             upPressed = true;
@@ -47,8 +45,11 @@ public class KeyHandler implements KeyListener {
         }
 
         //Action
-        if(code == KeyEvent.VK_CONTROL){
+        if(code == KeyEvent.VK_E){
             actionPressed = true;
+        }
+        if(code == KeyEvent.VK_Q){
+            dropPressed = true;
         }
 
         //Walk Player 2
@@ -66,8 +67,11 @@ public class KeyHandler implements KeyListener {
         }
 
         //Action Player 2
-        if(code == KeyEvent.VK_E){
+        if(code == KeyEvent.VK_CONTROL){
             actionPressed2 = true;
+        }
+        if(code == KeyEvent.VK_SHIFT){
+            dropPressed2 = true;
         }
 
     }
@@ -86,9 +90,7 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_SPACE){
             space = false;
         }
-        if(code == KeyEvent.VK_SHIFT){
-            shift = false;
-        }
+
 
         //Walking
         if(code == KeyEvent.VK_W){
@@ -105,8 +107,11 @@ public class KeyHandler implements KeyListener {
         }
 
         //Action
-        if(code == KeyEvent.VK_CONTROL){
+        if(code == KeyEvent.VK_E){
             actionPressed = false;
+        }
+        if(code == KeyEvent.VK_Q){
+            dropPressed = false;
         }
 
         //Walk Player 2
@@ -124,8 +129,11 @@ public class KeyHandler implements KeyListener {
         }
 
         //Action Player 2
-        if(code == KeyEvent.VK_E){
+        if(code == KeyEvent.VK_CONTROL){
             actionPressed2 = false;
+        }
+        if(code == KeyEvent.VK_SHIFT){
+            dropPressed2 = false;
         }
     }
 }

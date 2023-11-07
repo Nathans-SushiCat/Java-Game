@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class Player extends Entity {
@@ -17,6 +18,7 @@ public class Player extends Entity {
 
     Entity handItem = null;
     int immunityTimer;
+    Entity droppedItem;
 
     ArrayList<Heart> hearts = new ArrayList<Heart>();
     public Player(GamePanel gp, KeyHandler keyH){
@@ -50,6 +52,22 @@ public class Player extends Entity {
     }
     public void addHeart(){
         hearts.add(new Heart(Heart, HeartHalf, HeartEmpty));
+    }
+
+    public void pickupItem(Entity item){
+        handItem = item;
+        item.connectedToEntity = this;
+        AudioController.playPickupSound();
+    }
+
+    public void dropItem(){
+        if(handItem == null)
+            return;
+
+        droppedItem = handItem;
+        AudioController.playDropSound();
+        handItem.connectedToEntity = null;
+        handItem = null;
     }
 
     public void getPlayerImage(){
@@ -98,6 +116,8 @@ public class Player extends Entity {
     @Override
     public void update(){
 
+        if(droppedItem != null && distancetoObject(this, droppedItem) > GamePanel.tileSize)
+            droppedItem = null;
 
         //Key Inputs
         if(playerIndex == 1){
@@ -120,7 +140,11 @@ public class Player extends Entity {
             if(!(keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed)){
                 direction = "idle";
             }
-        }else {
+            if(keyH.dropPressed){
+                dropItem();
+            }
+        }
+        else {
             //Key Inputs
             if(keyH.upPressed2 && !LockY_P){
                 direction = "up";
@@ -142,8 +166,10 @@ public class Player extends Entity {
             if(!(keyH.upPressed2 || keyH.downPressed2 || keyH.rightPressed2 || keyH.leftPressed2)){
                 direction = "idle";
             }
+            if(keyH.dropPressed2){
+                dropItem();
+            }
         }
-
 
         spriteCounter ++;
         int animationspeed = 10;

@@ -12,7 +12,6 @@ import java.io.IOException;
 
 public class PortalGun extends Entity {
 
-    Entity connectedToEntity = null;
     KeyHandler keyH;
     Portal portalA;
     Portal portalB;
@@ -20,7 +19,6 @@ public class PortalGun extends Entity {
 
     int portalCooldown;
     int portalCooldownTimer;
-
 
     public PortalGun(GamePanel gp, KeyHandler keyHandler, int x, int y, int cooldown) {
         this.x = x;
@@ -133,10 +131,8 @@ public class PortalGun extends Entity {
             return;
 
         if (collision.hasCollided()) {
-            if (collision.collidedEntity instanceof Player player && player.handItem == null){
-                player.handItem = this;
-                connectedToEntity = player;
-                AudioController.playPickupSound();
+            if (collision.collidedEntity instanceof Player player && player.handItem == null && player.droppedItem != this){
+                player.pickupItem(this);
             }
         }
     }

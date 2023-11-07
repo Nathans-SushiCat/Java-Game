@@ -62,5 +62,8 @@ public class AudioController {
     public static void playCatSound(){
         playSound("Cat.wav");
     }
+    public static void playDropSound(){
+        playSound("Drop.wav");
+    }
 
 }

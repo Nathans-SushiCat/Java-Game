@@ -35,7 +35,6 @@ public class Sushi extends Entity {
 
     @Override
     public void update() {
-
     }
 
     @Override
@@ -50,8 +49,9 @@ public class Sushi extends Entity {
         if(collision.collidedEntity instanceof Cat cat && !cat.fat){
             if(cat.lifes != cat.maxLifes)
                 cat.lifes = cat.maxLifes;
-            else
+            else{
                 cat.fat = true;
+            }
 
             AudioController.playSushiEatSound();
             gp.entities.remove(this);

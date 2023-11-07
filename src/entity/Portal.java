@@ -91,8 +91,6 @@ public class Portal extends Entity {
                     touchedEntitys.remove(touchedEntitys.get(i));
             }
         }
-
-
     }
 
     @Override
@@ -112,7 +110,7 @@ public class Portal extends Entity {
     @Override
     public void handleCollision(Collision collision) {
 
-        if (!collision.hasCollided() || !collision.collidedEntity.solid || !collision.collidedEntity.teleportable)
+        if (!collision.hasCollided() || !collision.collidedEntity.solid || !collision.collidedEntity.teleportable || connectedPortal == null)
             return;
 
         Entity e = collision.collidedEntity;

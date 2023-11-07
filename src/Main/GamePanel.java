@@ -53,7 +53,6 @@ public class GamePanel extends JPanel implements Runnable{
 
         Collections.addAll(entities,
                 new Crate(this, keyH, 400, 200),
-                new Crate(this, keyH, 400, 400),
                 new Lava(this, keyH, GamePanel.tileSize*14,30),
                 new Lava(this, keyH, GamePanel.tileSize*14,30),
                 new Lava(this, keyH, (int) (GamePanel.tileSize*14.5),30),
@@ -61,19 +60,24 @@ public class GamePanel extends JPanel implements Runnable{
                 new Lava(this, keyH, GamePanel.tileSize*15,20),
                 new Lava(this, keyH, GamePanel.tileSize*15,50),
                 new NPC(this, keyH, "NPC", new String[]{"Hello", "my friend", "What's up?", "have you already done your homework?"}, 5),
-                new Spike(this, keyH, 500, 100, lever),
-                new Spike(this, keyH, 500+tileSize, 100, lever),
-                new Spike(this, keyH, 500+2*tileSize, 100, lever),
+                new Spike(this, keyH, 500, tileSize, lever),
+                new Spike(this, keyH, 500+tileSize, tileSize, lever),
+                new Spike(this, keyH, 500+2*tileSize, tileSize, lever),
                 new Ein_Etwas(this, 900,200, 180, lever2),
                 new Sushi(this, keyH,200, 600,1),
                 new Sushi(this, keyH,200+GamePanel.tileSize, 600,1),
+                new Sushi(this, keyH,200+GamePanel.tileSize*2, 600,1),
                 new Cat(this, 100,500, 4),
                 new Player(this, keyH,100,400, 2),
                 new Player(this, keyH,100,300, 1),
-                new PortalGun(this, keyH, 100, 600, 60),
-                new Sword(this, keyH, 200, 400, 30),
+                new PortalGun(this, keyH, 500, 400, 60),
+                new Sword(this, keyH, 500, 500, 30),
                 new Star(this,900,600, 5, 4),
-                new Dingeldodel(this, 750,600, 4)
+
+                new Dingeldodel(this, 1200,600, 4),
+                new Dingeldodel(this, 1200,450, 4),
+                new Dingeldodel(this, 1200,300, 4),
+                new Dingeldodel(this, 1200,150, 4)
         );
     }
     public boolean objectExists(Entity e){
@@ -127,6 +131,7 @@ public class GamePanel extends JPanel implements Runnable{
                     if(entities.get(j) != entities.get(i))
                         entities.get(j).collisions.add(entities.get(j).createCollisionWith(entities.get(i)));
                 }
+
                 boolean anyCollision = false;
                 for(Collision c : entities.get(j).collisions){
                     if(c.collided){

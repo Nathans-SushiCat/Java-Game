@@ -87,7 +87,8 @@ public class Cat extends Entity{
                 y = Owner.y;
             }
         }
-
+        if(fat)
+            moving = false;
         spriteCounter ++;
         int animationSpeed = moving ? 10 : 45;
 
@@ -109,6 +110,7 @@ public class Cat extends Entity{
                     fat = false;
                     lvlUp();
                     lifes = maxLifes;
+                    EatIndex = 0;
                 }
             }
         }
@@ -133,7 +135,7 @@ public class Cat extends Entity{
             angryAt = null;
             angry = false;
         }
-        if(angryAt != null)
+        if(angryAt != null && !fat)
             moveTowards(angryAt.x,angryAt.y);
     }
 

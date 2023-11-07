@@ -12,13 +12,12 @@ import java.io.IOException;
 
 public class Sword extends Entity {
 
-    Entity connectedToEntity = null;
     KeyHandler keyH;
 
-    boolean punch;
+    boolean punch = false;
     int punchCooldown;
     int punchCooldownTimer;
-    int xScale, yScale;
+    int xScale = 1, yScale = 1;
 
 
     public Sword(GamePanel gp, KeyHandler keyHandler, int x, int y, int cooldown) {
@@ -105,20 +104,25 @@ public class Sword extends Entity {
         BufferedImage image;
 
         if(!punch){
-
             if(spriteNum == 1){
-                g2.drawImage(image1, x+(xScale == -1 ? GamePanel.scale*10: 0 ), y, GamePanel.tileSize * xScale, GamePanel.tileSize, null);
+                g2.drawImage(image1, x + (xScale == -1 ? GamePanel.scale*10: 0 ), y, GamePanel.tileSize * xScale, GamePanel.tileSize, null);
             }else {
-                g2.drawImage(image1, x +(xScale == -1 ? GamePanel.scale*10: 0 ), y+(GamePanel.scale), GamePanel.tileSize * xScale, GamePanel.tileSize, null);
+                g2.drawImage(image1, x + (xScale == -1 ? GamePanel.scale*10: 0 ), y+(GamePanel.scale), GamePanel.tileSize * xScale, GamePanel.tileSize, null);
             }
         }else {
 
             spriteNum++;
 
-            if(connectedToEntity.direction.equals("up") || connectedToEntity.direction.equals("down"))
+            if(connectedToEntity.direction.equals("up") || connectedToEntity.direction.equals("down")){
                 image = image3;
-            else
+                sizeVertical = 5 * GamePanel.scale;
+                sizeHorizontal = 10* GamePanel.scale;
+            } else{
                 image = image2;
+                sizeVertical = 5 * GamePanel.scale;
+                sizeHorizontal = 10* GamePanel.scale;
+            }
+
             g2.drawImage(image, x+ (xScale == -1 ? GamePanel.scale * 10 : 0), y, GamePanel.tileSize * xScale, GamePanel.tileSize*yScale, null);
 
             if(spriteNum <= 6)
@@ -127,26 +131,26 @@ public class Sword extends Entity {
             punch = false;
             spriteNum = 1;
         }
-
     }
 
     @Override
     public void handleCollision(Collision collision) {
 
 
-
         if (collision.hasCollided()) {
-            if(collision.collidedEntity.hostile){
-                removeLife();
+            if(collision.collidedEntity.hostile && punch){
+                collision.collidedEntity.removeLife(20);
+            }
+            if(collision.collidedEntity instanceof Ein_Etwas_Bullet bullet){
+                gp.entities.remove(bullet);
+                AudioController.playHitSound();
             }
 
             if(connectedToEntity != null)
                 return;
 
-            if (collision.collidedEntity instanceof Player player && player.handItem == null){
-                player.handItem = this;
-                connectedToEntity = player;
-                AudioController.playPickupSound();
+            if (collision.collidedEntity instanceof Player player && player.handItem == null && player.droppedItem != this ){
+                player.pickupItem(this);
             }
         }
     }
