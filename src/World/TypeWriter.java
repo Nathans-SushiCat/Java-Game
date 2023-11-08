@@ -1,12 +1,13 @@
 package World;
 
 import Main.GamePanel;
+import Main.SimpleEntity;
 import jdk.jfr.Description;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class TypeWriter {
+public class TypeWriter extends SimpleEntity {
 
     private int counter;
     private String[]  texts;
@@ -17,7 +18,6 @@ public class TypeWriter {
 
     private boolean multipleTextsMode = false;
     private int currentChar;
-    public int x,y;
 
     public float waitTime;
 

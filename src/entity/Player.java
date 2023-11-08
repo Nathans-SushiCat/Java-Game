@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Player extends Entity {
     KeyHandler keyH;
     BufferedImage Heart, HeartHalf, HeartEmpty;
-    int playerIndex;
+    public int playerIndex;
 
     Entity handItem = null;
     int immunityTimer;

@@ -61,7 +61,7 @@ public class Entity implements Collidable {
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, idle1, idle2;
     public BufferedImage image1, image2, image3, image4;
     public String direction;
-    Entity connectedToEntity = null;
+    public Entity connectedToEntity = null;
     public GamePanel gp;
     public int sizeVertical = GamePanel.tileSize;
     public int sizeHorizontal = GamePanel.tileSize;;
@@ -190,7 +190,6 @@ public class Entity implements Collidable {
     }
 
     public void update(){
-
     }
 
     public void draw(Graphics2D g2){
