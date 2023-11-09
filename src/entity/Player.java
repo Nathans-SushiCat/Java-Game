@@ -113,6 +113,7 @@ public class Player extends Entity {
             e.printStackTrace();
         }
     }
+
     @Override
     public void update(){
 

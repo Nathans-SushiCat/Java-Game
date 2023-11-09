@@ -75,7 +75,7 @@ public class Cat extends Entity{
         if(Owner != null && !gp.objectExists(Owner))
             Owner = null;
 
-        if(Owner != null && !fat){
+        if(Owner != null && !fat && !angry){
             float distanceToOwner = distancetoObject(this, Owner);
             if( distanceToOwner > 3* GamePanel.tileSize)
                 moveTowards(Owner.x, Owner.y);
@@ -124,14 +124,17 @@ public class Cat extends Entity{
 
 
         for (Entity e : gp.entities){
-            if(angry && gp.entities.contains(angryAt) && angryAt.angryAt.equals(this))
+            //Stay Angry
+            if(angry && gp.objectExists(angryAt) && angryAt.angryAt.equals(this))
                 break;
 
+            //Set Angry
             if(e.angryAt != null && (e.angryAt.equals(Owner) || e.angryAt.equals(this))){
                 angryAt = e;
                 angry = true;
                 break;
             }
+            //Reset Angry state
             angryAt = null;
             angry = false;
         }

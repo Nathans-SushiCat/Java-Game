@@ -158,8 +158,7 @@ public class Entity implements Collidable {
         if (other instanceof Entity) {
             Entity otherObject = (Entity) other;
 
-            if (distancetoObject(this, otherObject) > GamePanel.tileSize)
-                return new Collision();
+
 
             double horizontalDifference = this.x - otherObject.x;
             double verticalDifference = this.y - otherObject.y;
@@ -230,6 +229,8 @@ public class Entity implements Collidable {
             LockX_N = false;
         }
 
+    }
+    public void handleNoCollision() {
     }
 
     public void handleCollision(Collision collision, Entity ignore) {

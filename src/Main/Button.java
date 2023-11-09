@@ -92,6 +92,11 @@ public class Button extends Entity {
             pressed = true;
             connectedToEntity = collision.collidedEntity;
         }
-        System.out.println("COLLIDE");
     }
+    @Override
+    public void handleNoCollision() {
+        pressed = false;
+        buttonPressIndex = 0;
+    }
+
 }

@@ -14,7 +14,7 @@ public class GamePanel extends JPanel implements Runnable{
     //SCREEN SETTINGS
     public static final int originalTileSize = 16;
     public static final int scale = 5;
-    public Font mainFont = new Font ("Consolas", Font.PLAIN, 17);
+    public Font mainFont = new Font ("Consolas", Font.PLAIN, 12);
     public Font boldFont = new Font ("Consolas", Font.BOLD, 30);
     public static final int tileSize = originalTileSize * scale;
     final int maxScreenCol = 16;
@@ -116,6 +116,10 @@ public class GamePanel extends JPanel implements Runnable{
         while (gameThread != null){
             // 1 UPDATE: update information
             update();
+
+            if(keyH.esc){
+                LoadRoom(0);
+            }
             //2 DRAW: draw the screen
             repaint();
 
@@ -167,6 +171,8 @@ public class GamePanel extends JPanel implements Runnable{
                     if(!anyCollision)
                         entities.get(j).handleCollision(c);
                 }
+                if(!anyCollision)
+                    entities.get(j).handleNoCollision();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -177,8 +183,7 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(Color.WHITE);
-        Font consolasFont = new Font("Consolas", Font.PLAIN, 12);
-        g2.setFont(consolasFont);
+        g2.setFont(mainFont);
         for (Entity e : entities){
             e.draw(g2);
         }

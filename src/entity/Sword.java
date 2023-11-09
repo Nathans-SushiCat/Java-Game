@@ -141,7 +141,7 @@ public class Sword extends Entity {
             if(collision.collidedEntity.hostile && punch){
                 collision.collidedEntity.removeLife(20);
             }
-            if(collision.collidedEntity instanceof Ein_Etwas_Bullet bullet){
+            if(collision.collidedEntity instanceof Ein_Etwas_Bullet bullet && punch){
                 gp.entities.remove(bullet);
                 AudioController.playHitSound();
             }
