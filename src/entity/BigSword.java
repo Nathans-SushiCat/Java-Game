@@ -10,23 +10,22 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Sword extends Entity {
+public class BigSword extends Entity {
 
     KeyHandler keyH;
-
     boolean punch = false;
     int punchCooldown;
     int punchCooldownTimer;
     int xScale = 1, yScale = 1;
 
 
-    public Sword(GamePanel gp, KeyHandler keyHandler, int x, int y, int cooldown) {
+    public BigSword(GamePanel gp, KeyHandler keyHandler, int x, int y, int cooldown) {
         this.x = x;
         this.y = y;
         this.gp = gp;
         solid = false;
-        sizeVertical = 5 * GamePanel.scale;
-        sizeHorizontal = 10* GamePanel.scale;
+        sizeVertical = 16 * GamePanel.scale;
+        sizeHorizontal = 16* GamePanel.scale;
         punchCooldown = cooldown;
         this.keyH = keyHandler;
         getSprites();
@@ -35,9 +34,9 @@ public class Sword extends Entity {
 
     public void getSprites() {
         try {
-            image1 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/Sword.png"));
-            image2 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/Sword-Punch1.png"));
-            image3 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/Sword-Punch2.png"));
+            image1 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/BigSword.png"));
+            image2 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/BigSword-Punch1.png"));
+            image3 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/BigSword-Punch2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,9 +72,6 @@ public class Sword extends Entity {
             punch = true;
             punchCooldownTimer = punchCooldown;
             spriteNum = 1;
-            if(player.playerIndex == 1 ? keyH.actionPressed : keyH.actionPressed2){
-
-            }
         }
         String s = connectedToEntity.direction;
 
@@ -89,8 +85,8 @@ public class Sword extends Entity {
         else
             yScale = 1;
 
-        x = connectedToEntity.x + (3 * GamePanel.scale) + (punch && (s.equals("idle") ||s.equals("left") || s.equals("right")) ? GamePanel.scale * spriteNum * xScale : 0);
-        y = connectedToEntity.y + (4 * GamePanel.scale) + (punch && (s.equals("down") ||s.equals("up"))? GamePanel.scale * spriteNum * yScale: 0);
+        x = connectedToEntity.x + (xScale == 1 && !(punch ? (s.equals("down") || s.equals("up")) : false) ? 6 * GamePanel.scale : 0) + (punch && (s.equals("idle") ||s.equals("left") || s.equals("right")) ? GamePanel.scale * spriteNum * xScale : 0);
+        y = connectedToEntity.y + (punch && (s.equals("down") ||s.equals("up"))? GamePanel.scale * spriteNum * yScale: 0);
 
         if (s.equals("idle") && !punch)
             spriteNum = connectedToEntity.spriteNum;
@@ -103,7 +99,7 @@ public class Sword extends Entity {
     public void draw(Graphics2D g2) {
         BufferedImage image;
 
-        if(!punch){
+        if(!punch || connectedToEntity == null){
             if(spriteNum == 1){
                 g2.drawImage(image1, x + (xScale == -1 ? GamePanel.scale*10: 0 ), y, GamePanel.tileSize * xScale, GamePanel.tileSize, null);
             }else {
@@ -115,17 +111,18 @@ public class Sword extends Entity {
 
             if(connectedToEntity.direction.equals("up") || connectedToEntity.direction.equals("down")){
                 image = image3;
-                sizeVertical = 5 * GamePanel.scale;
+                sizeVertical = 20 * GamePanel.scale;
                 sizeHorizontal = 10* GamePanel.scale;
             } else{
                 image = image2;
-                sizeVertical = 5 * GamePanel.scale;
-                sizeHorizontal = 10* GamePanel.scale;
+                sizeVertical = 10 * GamePanel.scale;
+                sizeHorizontal = 20* GamePanel.scale;
             }
 
             g2.drawImage(image, x+ (xScale == -1 ? GamePanel.scale * 10 : 0), y, GamePanel.tileSize * xScale, GamePanel.tileSize*yScale, null);
 
-            if(spriteNum <= 6)
+            //Punch State
+            if(spriteNum <= 12)
                 return;
 
             punch = false;
@@ -138,7 +135,7 @@ public class Sword extends Entity {
         if (collision.hasCollided()) {
             if(collision.collidedEntity.hostile && punch){
                 collision.collidedEntity.angryAt = connectedToEntity;
-                collision.collidedEntity.removeLife(20);
+                collision.collidedEntity.removeLife(10);
             }
             if(collision.collidedEntity instanceof Ein_Etwas_Bullet bullet && punch){
                 gp.entities.remove(bullet);

@@ -65,7 +65,7 @@ public class GamePanel extends JPanel implements Runnable{
 
             TypeWriter typeWriter = new TypeWriter("Hello i am the Human",400,300, 5);
             simpleEntities.add(typeWriter);
-            typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.5.1"}, 4);
+            typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.5.2"}, 4);
 
             Lever lever = new Lever(this,keyH, 250,100, Lever_Handle.State.LEFT);
             Lever lever2 = new Lever(this, keyH, 250, 450, Lever_Handle.State.RIGHT);
@@ -94,6 +94,7 @@ public class GamePanel extends JPanel implements Runnable{
                     new Player(this, keyH,100,300, 1),
                     new PortalGun(this, keyH, 500, 400, 60),
                     new Sword(this, keyH, 500, 500, 30),
+                    new BigSword(this, keyH, 500, 600, 10),
                     new Star(this,900,600, 5, 4),
 
                     new Dingeldodel(this, 1200,600, 4),
@@ -117,9 +118,7 @@ public class GamePanel extends JPanel implements Runnable{
             // 1 UPDATE: update information
             update();
 
-            if(keyH.esc){
-                LoadRoom(0);
-            }
+
             //2 DRAW: draw the screen
             repaint();
 
@@ -142,7 +141,11 @@ public class GamePanel extends JPanel implements Runnable{
     }
     public void update(){
 
+        if(keyH.esc){
+            LoadRoom(0);
+        }
         gameManager.update();
+
         for (int i = 0; i < simpleEntities.size(); i++){
             simpleEntities.get(i).update();
         }

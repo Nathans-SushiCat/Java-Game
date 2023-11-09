@@ -29,7 +29,6 @@ public class Collision {
         this.collided = collided;
     }
 
-
     public CollisionDirection getDirection() {
         return direction;
     }
@@ -37,7 +36,6 @@ public class Collision {
     public void setDirection(CollisionDirection direction) {
         this.direction = direction;
     }
-
 
     @Override
     public String toString() {
