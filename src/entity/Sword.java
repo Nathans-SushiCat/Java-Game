@@ -25,8 +25,8 @@ public class Sword extends Entity {
         this.y = y;
         this.gp = gp;
         solid = false;
-        sizeVertical = 5 * GamePanel.scale;
-        sizeHorizontal = 10* GamePanel.scale;
+        sizeVertical = 9 * GamePanel.scale;
+        sizeHorizontal = 9* GamePanel.scale;
         punchCooldown = cooldown;
         this.keyH = keyHandler;
         getSprites();
@@ -89,8 +89,8 @@ public class Sword extends Entity {
         else
             yScale = 1;
 
-        x = connectedToEntity.x + (3 * GamePanel.scale) + (punch && (s.equals("idle") ||s.equals("left") || s.equals("right")) ? GamePanel.scale * spriteNum * xScale : 0);
-        y = connectedToEntity.y + (4 * GamePanel.scale) + (punch && (s.equals("down") ||s.equals("up"))? GamePanel.scale * spriteNum * yScale: 0);
+        x = connectedToEntity.x + (!s.equals("left") ? (6 * GamePanel.scale) : 0) + (punch && (s.equals("idle") ||s.equals("left") || s.equals("right")) ? GamePanel.scale * spriteNum * xScale : 0);
+        y = connectedToEntity.y + (8 * GamePanel.scale) + (punch && (s.equals("down") || s.equals("up")) ?  GamePanel.scale * spriteNum * yScale - (s.equals("up") ? sizeVertical : 0): 0);
 
         if (s.equals("idle") && !punch)
             spriteNum = connectedToEntity.spriteNum;
@@ -115,15 +115,15 @@ public class Sword extends Entity {
 
             if(connectedToEntity.direction.equals("up") || connectedToEntity.direction.equals("down")){
                 image = image3;
-                sizeVertical = 5 * GamePanel.scale;
-                sizeHorizontal = 10* GamePanel.scale;
+                sizeVertical = 10 * GamePanel.scale;
+                sizeHorizontal = 5* GamePanel.scale;
             } else{
                 image = image2;
                 sizeVertical = 5 * GamePanel.scale;
                 sizeHorizontal = 10* GamePanel.scale;
             }
 
-            g2.drawImage(image, x+ (xScale == -1 ? GamePanel.scale * 10 : 0), y, GamePanel.tileSize * xScale, GamePanel.tileSize*yScale, null);
+            g2.drawImage(image, x+ (xScale == -1 ? GamePanel.scale * 10 : 0), y + (connectedToEntity.direction.equals("up") ? sizeVertical: 0), GamePanel.tileSize * xScale, GamePanel.tileSize*yScale, null);
 
             if(spriteNum <= 6)
                 return;

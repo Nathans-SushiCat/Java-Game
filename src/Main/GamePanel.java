@@ -189,6 +189,8 @@ public class GamePanel extends JPanel implements Runnable{
         g2.setFont(mainFont);
         for (Entity e : entities){
             e.draw(g2);
+            g2.drawString("x",e.x,e.y);
+            g2.drawString("x",e.x+e.sizeHorizontal,e.y+e.sizeVertical);
         }
         for (SimpleEntity e : simpleEntities){
             e.draw(g2);

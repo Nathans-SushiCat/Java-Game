@@ -27,6 +27,8 @@ public class Button extends Entity {
         this.x = x;
         this.y = y;
         this.onClickFunction = onClickFunction;
+        sizeHorizontal = 2*GamePanel.tileSize;
+        sizeVertical = GamePanel.tileSize;
         this.text = text;
         getSprites();
     }
@@ -47,10 +49,12 @@ public class Button extends Entity {
     }
     @Override
     public void draw(Graphics2D g2){
+        g2.drawString("x",x,y);
+        g2.drawString("x",x+sizeHorizontal,y+sizeVertical);
         g2.setFont(gp.boldFont);
         BufferedImage image = ButtonDownImages[buttonPressIndex];
 
-        g2.drawImage(pressed ? image : ButtonImage, x,y,2*GamePanel.tileSize, GamePanel.tileSize, null);
+        g2.drawImage(pressed ? image : ButtonImage, x,y,sizeHorizontal,sizeVertical, null);
         g2.drawString(text, x+GamePanel.tileSize - (g2.getFontMetrics().stringWidth(text)/2),(int)(y+GamePanel.tileSize/(pressed ? 2 : 2.8)));
         g2.setFont(gp.mainFont);
     }

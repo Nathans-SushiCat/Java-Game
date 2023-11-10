@@ -25,7 +25,7 @@ public class BigSword extends Entity {
         this.gp = gp;
         solid = false;
         sizeVertical = 16 * GamePanel.scale;
-        sizeHorizontal = 16* GamePanel.scale;
+        sizeHorizontal = 16 * GamePanel.scale;
         punchCooldown = cooldown;
         this.keyH = keyHandler;
         getSprites();
@@ -37,6 +37,8 @@ public class BigSword extends Entity {
             image1 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/BigSword.png"));
             image2 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/BigSword-Punch1.png"));
             image3 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/BigSword-Punch2.png"));
+            image4 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/BigSword-Punch3.png"));
+            image5 = ImageIO.read(getClass().getResourceAsStream("/Resources/Objects/BigSword-Punch4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,6 +50,8 @@ public class BigSword extends Entity {
             connectedToEntity = null;
 
         if (connectedToEntity == null) {
+            sizeVertical = 15 * GamePanel.scale;
+            sizeHorizontal = 15* GamePanel.scale;
             spriteCounter++;
             int animationSpeed = 30;
             if (spriteCounter > animationSpeed) {
@@ -85,8 +89,8 @@ public class BigSword extends Entity {
         else
             yScale = 1;
 
-        x = connectedToEntity.x + (xScale == 1 && !(punch ? (s.equals("down") || s.equals("up")) : false) ? 6 * GamePanel.scale : 0) + (punch && (s.equals("idle") ||s.equals("left") || s.equals("right")) ? GamePanel.scale * spriteNum * xScale : 0);
-        y = connectedToEntity.y + (punch && (s.equals("down") ||s.equals("up"))? GamePanel.scale * spriteNum * yScale: 0);
+        x = connectedToEntity.x + (!(punch && (s.equals("down") || s.equals("up"))) ? 6 * GamePanel.scale : 3 * GamePanel.scale) + (punch && (s.equals("idle") ||s.equals("left") || s.equals("right")) ? GamePanel.scale * spriteNum * xScale : 0);
+        y = connectedToEntity.y + (punch && (s.equals("left") || s.equals("right") || s.equals("idle")) ? + 5 * GamePanel.scale : 0) + ((s.equals("down") ||s.equals("up")) ? GamePanel.scale * spriteNum * yScale: 0);
 
         if (s.equals("idle") && !punch)
             spriteNum = connectedToEntity.spriteNum;
@@ -97,8 +101,7 @@ public class BigSword extends Entity {
 
     @Override
     public void draw(Graphics2D g2) {
-        BufferedImage image;
-
+        BufferedImage image = null;
         if(!punch || connectedToEntity == null){
             if(spriteNum == 1){
                 g2.drawImage(image1, x + (xScale == -1 ? GamePanel.scale*10: 0 ), y, GamePanel.tileSize * xScale, GamePanel.tileSize, null);
@@ -108,18 +111,32 @@ public class BigSword extends Entity {
         }else {
 
             spriteNum++;
+            String playerDir = connectedToEntity.direction;
 
-            if(connectedToEntity.direction.equals("up") || connectedToEntity.direction.equals("down")){
-                image = image3;
-                sizeVertical = 20 * GamePanel.scale;
-                sizeHorizontal = 10* GamePanel.scale;
-            } else{
+            if(playerDir.equals("left")){
+                image = image5;
+                sizeVertical = 10 * GamePanel.scale;
+                sizeHorizontal = 20* GamePanel.scale;
+            }
+            else if(playerDir.equals("right") || playerDir.equals("idle")){
                 image = image2;
                 sizeVertical = 10 * GamePanel.scale;
                 sizeHorizontal = 20* GamePanel.scale;
             }
 
-            g2.drawImage(image, x+ (xScale == -1 ? GamePanel.scale * 10 : 0), y, GamePanel.tileSize * xScale, GamePanel.tileSize*yScale, null);
+            if(playerDir.equals("up")){
+                image = image4;
+                sizeVertical = 20 * GamePanel.scale;
+                sizeHorizontal = 10* GamePanel.scale;
+            }
+            else if(playerDir.equals("down")){
+                image = image3;
+                sizeVertical = 20 * GamePanel.scale;
+                sizeHorizontal = 10* GamePanel.scale;
+            }
+
+
+            g2.drawImage(image, x, y, sizeHorizontal , sizeVertical, null);
 
             //Punch State
             if(spriteNum <= 12)

@@ -59,7 +59,7 @@ public class Entity implements Collidable {
     public ArrayList<Collision> collisions = new ArrayList<Collision>();
     public boolean LockX_P = false, LockX_N = false, LockY_P = false, LockY_N = false;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, idle1, idle2;
-    public BufferedImage image1, image2, image3, image4;
+    public BufferedImage image1, image2, image3, image4, image5;
     public String direction;
     public Entity connectedToEntity = null;
     public GamePanel gp;
@@ -155,19 +155,13 @@ public class Entity implements Collidable {
 
     @Override
     public Collision createCollisionWith(Collidable other) {
-        if (other instanceof Entity) {
-            Entity otherObject = (Entity) other;
+        if (other instanceof Entity otherObject) {
 
+            double horizontalDifference = (this.x + this.sizeHorizontal / 2.0) - (otherObject.x + otherObject.sizeHorizontal / 2.0);
+            double verticalDifference = (this.y + this.sizeVertical / 2.0) - (otherObject.y + otherObject.sizeVertical / 2.0);
 
-
-            double horizontalDifference = this.x - otherObject.x;
-            double verticalDifference = this.y - otherObject.y;
-
-            double verticalSize;
-            double horizontalSize;
-
-            verticalSize = sizeVertical/2.0 + otherObject.sizeVertical/2.0;
-            horizontalSize = sizeHorizontal/2.0 + otherObject.sizeHorizontal/2.0;
+            double verticalSize = this.sizeVertical / 2.0 + otherObject.sizeVertical / 2.0;
+            double horizontalSize = this.sizeHorizontal / 2.0 + otherObject.sizeHorizontal / 2.0;
 
             if (Math.abs(horizontalDifference) <= horizontalSize && Math.abs(verticalDifference) <= verticalSize) {
                 if (Math.abs(horizontalDifference) >= Math.abs(verticalDifference)) {

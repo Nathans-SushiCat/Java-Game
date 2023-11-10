@@ -16,6 +16,7 @@ public class Lava extends Entity{
 
         this.gp = gp;
         this.keyH = keyH;
+        sizeVertical = 8*GamePanel.scale;
         setDefaultValues();
         getImage();
     }
@@ -25,6 +26,7 @@ public class Lava extends Entity{
         this.keyH = keyH;
         this.y = y;
         this.x = x;
+        sizeVertical = 8*GamePanel.scale;
         solid = false;
         getImage();
     }

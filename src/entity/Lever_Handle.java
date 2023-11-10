@@ -12,6 +12,8 @@ import java.io.IOException;
 public class Lever_Handle extends Entity{
     KeyHandler keyH;
     Lever lever;
+    int leftState =(2*GamePanel.scale);
+    int rightState =(10*GamePanel.scale);
     public enum State{
         LEFT,
         RIGHT,
@@ -23,7 +25,7 @@ public class Lever_Handle extends Entity{
         this.keyH = keyH;
         solid = true;
         this.x = x;
-        this.y = y;
+        this.y = y+GamePanel.scale;
         this.lever = lever;
         this.sizeVertical = 10 * GamePanel.scale;
         this.sizeHorizontal = 2 * GamePanel.scale;
@@ -38,13 +40,13 @@ public class Lever_Handle extends Entity{
         teleportable = false;
 
         if(state == State.LEFT){
-            this.x = x-GamePanel.tileSize/4;
+            this.x = x+leftState;
         }else if(state == State.RIGHT){
-            this.x = x+GamePanel.tileSize/4;
+            this.x = x+rightState;
         }else {
             this.x = x;
         }
-        this.y = y;
+        this.y = y+GamePanel.scale;
 
 
         this.lever = lever;
@@ -67,13 +69,14 @@ public class Lever_Handle extends Entity{
         if ( collision.hasCollided()) {
             if(!collision.collidedEntity.solid)
                 return;
+
             // Handle the collision direction
             switch (collision.getDirection()) {
                 case LEFT:
                     if(currentState.equals(State.LEFT))
                         break;
 
-                    if(x > lever.x-GamePanel.tileSize/4){
+                    if(x > lever.x+leftState){
                         x -= 1;
                         AudioController.playPushLeverSound();
                         currentState = State.NONE;
@@ -86,7 +89,7 @@ public class Lever_Handle extends Entity{
                     if(currentState.equals(State.RIGHT))
                         break;
 
-                    if(x < lever.x+GamePanel.tileSize/4){
+                    if(x < lever.x+rightState){
                         x += 1;
                         AudioController.playPushLeverSound();
                         currentState = State.NONE;
@@ -101,7 +104,6 @@ public class Lever_Handle extends Entity{
 
     @Override
     public void draw(Graphics2D g2) {
-
         g2.drawImage(image1, x, y, GamePanel.tileSize, GamePanel.tileSize, null);
     }
 }
