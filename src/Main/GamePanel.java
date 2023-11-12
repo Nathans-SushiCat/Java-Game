@@ -86,7 +86,7 @@ public class GamePanel extends JPanel implements Runnable{
         }else if(Room == 1){
             TypeWriter typeWriter = new TypeWriter("Hello i am the Human",400,300, 5);
             simpleEntities.add(typeWriter);
-            typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.5.5"}, 4);
+            typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.6"}, 4);
 
             Lever lever = new Lever(this,keyH, 250,100, Lever_Handle.State.LEFT);
             Lever lever2 = new Lever(this, keyH, 250, 450, Lever_Handle.State.RIGHT);
