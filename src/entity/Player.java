@@ -236,6 +236,18 @@ public class Player extends Entity {
             }
         }
     }
+
+    @Override
+    public void handleCollision(Collision collision) {
+        super.handleCollision(collision);
+
+        if (collision.hasCollided()) {
+            if (collision.collidedEntity.isHoldableItem && collision.collidedEntity.connectedToEntity == null  && handItem == null && droppedItem != collision.collidedEntity){
+                pickupItem(collision.collidedEntity);
+            }
+        }
+    }
+
     @Override
     public void draw(Graphics2D g2){
 

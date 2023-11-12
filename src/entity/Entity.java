@@ -17,7 +17,7 @@ public class Entity implements Collidable {
     boolean hostile = false;
     boolean moving = false;
     Entity angryAt;
-
+    boolean isHoldableItem = false;
     public int lifes = 0;
 
     int immunityTimer = 0;

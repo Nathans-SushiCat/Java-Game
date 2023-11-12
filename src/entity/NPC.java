@@ -27,7 +27,7 @@ public class NPC extends Entity{
         setDefaultValues();
         getNPCImage();
         this.texts = texts;
-        writer = new TypeWriter(x,y-30, speed);
+        writer = new TypeWriter(x,y-GamePanel.scale*6, speed);
     }
 
     public void setDefaultValues(){
@@ -47,7 +47,6 @@ public class NPC extends Entity{
 
     @Override
     public void handleCollision(Collision collision) {
-
 
         // Handle the collision, e.g., change the object's state
         if ( collision.hasCollided()) {

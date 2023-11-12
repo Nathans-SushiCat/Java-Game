@@ -1,12 +1,37 @@
 package World;
 
 import javax.sound.sampled.*;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.util.Objects;
 
 public class AudioController {
+
+    private static Clip currentMusic;
+
+    public static synchronized void playBackGroundMusic(final String url) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    if (currentMusic != null && currentMusic.isRunning()) {
+                        currentMusic.stop();
+                    }
+
+                    Clip newClip = AudioSystem.getClip();
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                            getClass().getResource("/Resources/Audio/" + url)
+                    );
+
+                    newClip.open(inputStream);
+                    newClip.start();
+
+                    // Set the newClip as the currentClip
+                    currentMusic = newClip;
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }).start();
+    }
     public static synchronized void playSound(final String url) {
         new Thread(new Runnable() {
             public void run() {
@@ -17,6 +42,7 @@ public class AudioController {
                             getClass().getResource("/Resources/Audio/" + url)
                     );
 
+                    clip.getFrameLength();
                     clip.open(inputStream);
                     clip.start();
                 } catch (Exception e) {
@@ -25,23 +51,21 @@ public class AudioController {
             }
         }).start();
     }
-    public static float AudioFileLength(String fileString) {
-        URL url = AudioController.class.getResource("/Resources/Audio/" + fileString);
-        if (url == null) {
-            // Handle the case where the resource is not found
+
+
+
+    public static float AudioFileLength(String url) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(AudioController.class.getResource("/Resources/Audio/" + url)));
+
+            AudioFormat format = audioInputStream.getFormat();
+            long frameLength = audioInputStream.getFrameLength();
+
+            return (frameLength + 0.0f) / format.getFrameRate();
+        } catch (UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
             return 0;
         }
-
-        try {
-            File file = new File(url.toURI());
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-            AudioFormat format = audioInputStream.getFormat();
-            long frames = audioInputStream.getFrameLength();
-            return (float) ((frames + 0.0) / format.getFrameRate());
-        } catch (UnsupportedAudioFileException | IOException  | URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     public static void playTypeWriterSound(){
@@ -87,7 +111,10 @@ public class AudioController {
         playSound("Drop.wav");
     }
     public static void playBackGroundMusicSound(){
-        playSound("Java-Game.wav");
+        playBackGroundMusic("Java-Game.wav");
+    }
+    public static void playBackGroundMusicGameBoySound(){
+        playBackGroundMusic("GameBoyMusic.wav");
     }
 
 

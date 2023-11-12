@@ -29,6 +29,7 @@ public class Sword extends Entity {
         sizeHorizontal = 9* GamePanel.scale;
         punchCooldown = cooldown;
         this.keyH = keyHandler;
+        isHoldableItem = true;
         getSprites();
     }
 
@@ -143,12 +144,6 @@ public class Sword extends Entity {
             if(collision.collidedEntity instanceof Ein_Etwas_Bullet bullet && punch){
                 gp.entities.remove(bullet);
                 AudioController.playHitSound();
-            }
-            if(connectedToEntity != null)
-                return;
-
-            if (collision.collidedEntity instanceof Player player && player.handItem == null && player.droppedItem != this ){
-                player.pickupItem(this);
             }
         }
     }

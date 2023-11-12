@@ -6,7 +6,6 @@ import World.AudioController;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -46,7 +45,6 @@ public class Ein_Etwas_Bullet extends Entity{
     public void getSprites(){
         try {
             image1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Ein_Etwas/Ein_Etwas-Bullet.png")));
-            //image1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Ein_Etwas/Ein_Etwas-Bullet.png")));
         }catch (IOException e){
             e.printStackTrace();
         }

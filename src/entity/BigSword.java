@@ -29,6 +29,7 @@ public class BigSword extends Entity {
         punchCooldown = cooldown;
         this.keyH = keyHandler;
         getSprites();
+        isHoldableItem = true;
     }
 
 
@@ -163,12 +164,6 @@ public class BigSword extends Entity {
             if(collision.collidedEntity instanceof Ein_Etwas_Bullet bullet && punch){
                 gp.entities.remove(bullet);
                 AudioController.playHitSound();
-            }
-            if(connectedToEntity != null)
-                return;
-
-            if (collision.collidedEntity instanceof Player player && player.handItem == null && player.droppedItem != this ){
-                player.pickupItem(this);
             }
         }
     }

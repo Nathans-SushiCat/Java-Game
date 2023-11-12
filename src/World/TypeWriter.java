@@ -23,40 +23,62 @@ public class TypeWriter extends SimpleEntity {
 
     public boolean finished = false;
 
+    public int waitTimeMultiplier;
+
     /**
      * @param speed higher speed means it takes longer 60 = 1/s
     */
+    public TypeWriter(String text, int x, int y , float speed, int multiplier){
+        this.x = x;
+        this.y = y;
+        this.text = text;
+        this.speed = speed;
+        waitTimeMultiplier = multiplier;
+        waitTime = speed*waitTimeMultiplier;
+    }
     public TypeWriter(String text, int x, int y , float speed){
         this.x = x;
         this.y = y;
         this.text = text;
         this.speed = speed;
-        waitTime = speed*4;
+        waitTimeMultiplier = 4;
+        waitTime = speed*waitTimeMultiplier;
     }
+
 
     public TypeWriter(String[] texts, int x, int y, float speed){
         this.x = x;
         this.y = y;
         this.speed = speed;
         resetvals();
-        waitTime = speed*4;
+        waitTimeMultiplier = 4;
+        waitTime = speed*waitTimeMultiplier;
         multipleTextsMode = true;
         this.texts = texts;
         this.text = "";
     }
 
+    public TypeWriter(int x, int y, float speed, int multiplier){
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        waitTimeMultiplier = multiplier;
+        waitTime = speed*waitTimeMultiplier;
+        text = "";
+    }
     public TypeWriter(int x, int y, float speed){
         this.x = x;
         this.y = y;
         this.speed = speed;
-        waitTime = speed*4;
+        waitTimeMultiplier = 4;
+        waitTime = speed*waitTimeMultiplier;
         text = "";
     }
 
     public void changeText(String text){
         this.text = text;
         resetvals();
-        waitTime = speed*4;
+        waitTime = speed*waitTimeMultiplier;
         multipleTextsMode = false;
 
     }
@@ -65,13 +87,13 @@ public class TypeWriter extends SimpleEntity {
         this.text = text;
         resetvals();
         this.speed = speed;
-        waitTime = speed*4;
+        waitTime = speed*waitTimeMultiplier;
         multipleTextsMode = false;
     }
     public void changeTexts(String[] texts){
         this.texts = texts;
         resetvals();
-        waitTime = speed*4;
+        waitTime = speed*waitTimeMultiplier;
         multipleTextsMode = true;
         textsIndex = 0;
 
@@ -79,7 +101,7 @@ public class TypeWriter extends SimpleEntity {
     public void changeTexts(String[] texts, float speed){
         this.texts = texts;
         resetvals();
-        waitTime = speed*4;
+        waitTime = speed*waitTimeMultiplier;
         multipleTextsMode = true;
         textsIndex = 0;
         this.speed = speed;
@@ -100,7 +122,7 @@ public class TypeWriter extends SimpleEntity {
             waitTime -= 1;
             //End Time After Finished Writing
             if(waitTime == 0){
-                waitTime = speed*4;
+                waitTime = speed*waitTimeMultiplier;
                 finished = true;
                 //Multiple Texts
                 if(multipleTextsMode && texts.length-1 > textsIndex){

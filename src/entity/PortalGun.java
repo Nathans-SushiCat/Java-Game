@@ -29,6 +29,7 @@ public class PortalGun extends Entity {
         sizeHorizontal = 10* GamePanel.scale;
         portalCooldown = cooldown;
         this.keyH = keyHandler;
+        isHoldableItem = true;
         getSprites();
     }
 
@@ -126,14 +127,6 @@ public class PortalGun extends Entity {
 
     @Override
     public void handleCollision(Collision collision) {
-
-        if(connectedToEntity != null)
-            return;
-
-        if (collision.hasCollided()) {
-            if (collision.collidedEntity instanceof Player player && player.handItem == null && player.droppedItem != this){
-                player.pickupItem(this);
-            }
-        }
+        return;
     }
 }

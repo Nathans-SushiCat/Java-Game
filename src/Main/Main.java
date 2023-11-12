@@ -28,3 +28,6 @@ public class Main {
     }
 
 }
+/*
+    made by Sushicat ฅ^•ﻌ•^ฅ
+* */

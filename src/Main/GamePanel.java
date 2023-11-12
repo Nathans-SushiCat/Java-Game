@@ -22,21 +22,22 @@ public class GamePanel extends JPanel implements Runnable{
     public Font mainFont = new Font ("Consolas", Font.PLAIN, 12);
     public Font boldFont = new Font ("Consolas", Font.BOLD, 30);
     public static int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 9;
-    final int screenWidth = tileSize * maxScreenCol;
-    final int screenHeight = tileSize * maxScreenRow;
+    static final int maxScreenCol = 16;
+    static final int maxScreenRow = 9;
+    public static final int screenWidth = tileSize * maxScreenCol;
+    public static final int screenHeight = tileSize * maxScreenRow;
     int FPS = 60;
     int backgroundMusicTimer = 0;
 
+    int Room;
+
 
     public static int getScale(){
-        String filePath = "file.txt"; // Assuming file.txt is in the root of the source folder
+        String filePath = "file.txt";
 
         try {
             Path resourcePath = Paths.get(Objects.requireNonNull(GamePanel.class.getClassLoader().getResource(filePath)).toURI());
-            int intValue = Integer.parseInt(Files.readString(resourcePath));
-            return intValue;
+            return Integer.parseInt(Files.readString(resourcePath));
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
@@ -70,25 +71,29 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void LoadRoom(int Room){
+        this.Room = Room;
         entities.clear();
         simpleEntities.clear();
         if(Room == 0){
+            backgroundMusicTimer = 0;
             entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) - (int)(tileSize*1.5), 1, "START"));
             entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) , 2, "CLEAR"));
             entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) + (int)(tileSize*1.5), 3, "EXIT"));
             entities.add(new Player(this, keyH,100,300, 1, "Sushicat"));
             entities.add(new Player(this, keyH,100,400, 2, "Schmillizidado"));
+            entities.add(new R141496());
 
         }else if(Room == 1){
             TypeWriter typeWriter = new TypeWriter("Hello i am the Human",400,300, 5);
             simpleEntities.add(typeWriter);
-            typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.5.4"}, 4);
+            typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.5.5"}, 4);
 
             Lever lever = new Lever(this,keyH, 250,100, Lever_Handle.State.LEFT);
             Lever lever2 = new Lever(this, keyH, 250, 450, Lever_Handle.State.RIGHT);
 
             entities.add(lever);
             entities.add(lever2);
+            entities.add(new R141496());
 
             Collections.addAll(entities,
                     new Crate(this, keyH, 400, 200),
@@ -119,6 +124,10 @@ public class GamePanel extends JPanel implements Runnable{
                     new Dingeldodel(this, 1200,300, 4),
                     new Dingeldodel(this, 1200,150, 4)
             );
+        }else if(Room == 2){
+            backgroundMusicTimer = 0;
+
+            entities.add(new Gameboy(this, GamePanel.tileSize*10, GamePanel.tileSize*4));
         }
     }
     public boolean objectExists(Entity e){
@@ -163,8 +172,14 @@ public class GamePanel extends JPanel implements Runnable{
         backgroundMusicTimer--;
 
         if(backgroundMusicTimer < 0){
-            AudioController.playBackGroundMusicSound();
-            backgroundMusicTimer =(int)(AudioController.AudioFileLength("Java-Game.wav")*60);
+            if(Room == 2){
+                AudioController.playBackGroundMusicGameBoySound();
+                backgroundMusicTimer =(int)(AudioController.AudioFileLength("GameBoyMusic.wav")*60);
+            }
+            else{
+                AudioController.playBackGroundMusicSound();
+                backgroundMusicTimer =(int)(AudioController.AudioFileLength("Java-Game.wav")*60);
+            }
         }
         if(keyH.esc){
             LoadRoom(0);
@@ -183,7 +198,6 @@ public class GamePanel extends JPanel implements Runnable{
         for( int j = 0; j < entities.size(); j++){
             try {
                 entities.get(j).collisions.clear();
-
                 for(int i = 0; i < entities.size(); i++){
                     if(entities.get(j) != entities.get(i))
                         entities.get(j).collisions.add(entities.get(j).createCollisionWith(entities.get(i)));
