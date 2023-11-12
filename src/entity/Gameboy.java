@@ -14,7 +14,10 @@ public class Gameboy extends Entity{
     Phase phase;
 
     String[] starTexts = new String[]{"Hello there,", "I am the king of all games", "and you're not going to beat me", "It's time to play...", "for your life", ""};
+    String[] game1Text = new String[]{"I guess now there should be some kind of boss fight", "but my programmer kind of lost the passion...", "to continue on making the game", "sooo i guess that's it for now", ""};
     int currentTextIndex = 0;
+
+    boolean move1 = true, move2 = false;
 
     enum Phase{
         START,
@@ -29,6 +32,7 @@ public class Gameboy extends Entity{
         sizeHorizontal = 14*GamePanel.scale;
         sizeVertical = GamePanel.tileSize;
         phase = Phase.START;
+        solid = true;
         direction = "left";
         writer = new TypeWriter(x,y-GamePanel.scale*6, 4f, 15);
         getSprites();
@@ -46,10 +50,37 @@ public class Gameboy extends Entity{
     @Override
     public void update() {
         writer.update();
+
         if(phase.equals(Phase.START)){
+
             if(writer.finished){
                 writer.changeText(starTexts[currentTextIndex]);
                 if(currentTextIndex+1 < starTexts.length)
+                    currentTextIndex++;
+                else{
+                    phase = Phase.GAME1;
+                    currentTextIndex = 0;
+                }
+            }
+
+        }else if (phase.equals(Phase.GAME1)){
+
+            if(x == GamePanel.tileSize*4){
+                move1 = false;
+                move2 = true;
+            }
+
+            if(move1){
+                moveTowards(GamePanel.tileSize*4, y);
+            }
+            if(move2){
+                moveTowards(GamePanel.tileSize*10, y);
+            }
+
+            if(writer.finished){
+                writer.waitTimeMultiplier = 40;
+                writer.changeText(game1Text[currentTextIndex]);
+                if(currentTextIndex+1 < game1Text.length)
                     currentTextIndex++;
                 else
                     phase = Phase.GAME1;
@@ -62,7 +93,7 @@ public class Gameboy extends Entity{
         writer.draw(g2);
 
         BufferedImage image = null;
-        if(direction.equals("left"))
+        if(direction.equals("left") ||direction.equals("idle"))
             image = left1;
         else if(direction.equals("right"))
             image = right1;

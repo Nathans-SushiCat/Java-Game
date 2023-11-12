@@ -77,7 +77,7 @@ public class GamePanel extends JPanel implements Runnable{
         if(Room == 0){
             backgroundMusicTimer = 0;
             entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) - (int)(tileSize*1.5), 1, "START"));
-            entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) , 2, "CLEAR"));
+            entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) , 2, "GAMEBOY"));
             entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) + (int)(tileSize*1.5), 3, "EXIT"));
             entities.add(new Player(this, keyH,100,300, 1, "Sushicat"));
             entities.add(new Player(this, keyH,100,400, 2, "Schmillizidado"));
@@ -127,6 +127,8 @@ public class GamePanel extends JPanel implements Runnable{
         }else if(Room == 2){
             backgroundMusicTimer = 0;
 
+            entities.add(new Player(this, keyH,100,400, 2, "Schmillizidado"));
+            entities.add(new Player(this, keyH,100,300, 1, "Sushicat"));
             entities.add(new Gameboy(this, GamePanel.tileSize*10, GamePanel.tileSize*4));
         }
     }
