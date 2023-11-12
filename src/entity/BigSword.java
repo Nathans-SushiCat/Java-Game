@@ -49,9 +49,10 @@ public class BigSword extends Entity {
         if(!gp.objectExists(connectedToEntity))
             connectedToEntity = null;
 
+
+
         if (connectedToEntity == null) {
-            sizeVertical = 15 * GamePanel.scale;
-            sizeHorizontal = 15* GamePanel.scale;
+
             spriteCounter++;
             int animationSpeed = 30;
             if (spriteCounter > animationSpeed) {
@@ -89,8 +90,13 @@ public class BigSword extends Entity {
         else
             yScale = 1;
 
-        x = connectedToEntity.x + (!(punch && (s.equals("down") || s.equals("up"))) ? 6 * GamePanel.scale : 3 * GamePanel.scale) + (punch && (s.equals("idle") ||s.equals("left") || s.equals("right")) ? GamePanel.scale * spriteNum * xScale : 0);
-        y = connectedToEntity.y + (punch && (s.equals("left") || s.equals("right") || s.equals("idle")) ? + 5 * GamePanel.scale : 0) + ((s.equals("down") ||s.equals("up")) ? GamePanel.scale * spriteNum * yScale: 0);
+        if(!punch){
+            sizeVertical = 15 * GamePanel.scale;
+            sizeHorizontal = 15* GamePanel.scale;
+        }
+
+        x = connectedToEntity.x + (!(punch && (s.equals("down") || s.equals("up"))) ? 6 * GamePanel.scale : 3 * GamePanel.scale) + (punch && (s.equals("left")) ? -connectedToEntity.sizeHorizontal : (s.equals("left") ? -GamePanel.scale*6 : 0)) + (punch && (s.equals("idle") ||s.equals("left") || s.equals("right")) ? GamePanel.scale * spriteNum * xScale : 0);
+        y = connectedToEntity.y + (punch && (s.equals("left") || s.equals("right") || s.equals("idle")) ? + 5 * GamePanel.scale : 0) + (punch && s.equals("up") ? -connectedToEntity.sizeVertical/2 :(punch && s.equals("down")? connectedToEntity.sizeVertical/3 : 0  ))+  ((s.equals("down") ||s.equals("up")) ? GamePanel.scale * spriteNum * yScale: 0);
 
         if (s.equals("idle") && !punch)
             spriteNum = connectedToEntity.spriteNum;
@@ -152,7 +158,7 @@ public class BigSword extends Entity {
         if (collision.hasCollided()) {
             if(collision.collidedEntity.hostile && punch){
                 collision.collidedEntity.angryAt = connectedToEntity;
-                collision.collidedEntity.removeLife(10);
+                collision.collidedEntity.removeLife(punchCooldown);
             }
             if(collision.collidedEntity instanceof Ein_Etwas_Bullet bullet && punch){
                 gp.entities.remove(bullet);

@@ -1,16 +1,12 @@
 package entity;
 
-import Main.Collidable;
 import Main.Collision;
 import Main.GamePanel;
-import Main.KeyHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
-import static World.AudioController.playHurtDingeldodelSound;
 
 public class Dingeldodel extends Entity{
 
@@ -105,7 +101,7 @@ public class Dingeldodel extends Entity{
         }
 
 
-        if(angryAt != null && distancetoObject(this, angryAt) < GamePanel.tileSize*4){
+        if(angryAt != null && distanceToObject(this, angryAt) < GamePanel.tileSize*4){
             moving = true;
             moveTowards(angryAt.x, angryAt.y);
         }else

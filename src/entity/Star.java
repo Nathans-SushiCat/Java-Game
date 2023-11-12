@@ -66,7 +66,6 @@ public class Star extends Entity{
                         p2 = player;
                 }
             }
-            System.out.println(p1 +"\n"+ p2);
         }
 
 
@@ -84,17 +83,17 @@ public class Star extends Entity{
 
         //Move away from Player
         boolean moving = false;
-        if(p1 != null && distancetoObject(this,p1) < radius*GamePanel.tileSize){
+        if(p1 != null && distanceToObject(this,p1) < radius*GamePanel.tileSize){
             moveAgainst(p1);
             moving = true;
         }
-        if(p2 != null && distancetoObject(this,p2) < radius*GamePanel.tileSize){
+        if(p2 != null && distanceToObject(this,p2) < radius*GamePanel.tileSize){
             moveAgainst(p2);
             moving = true;
         }
 
         //Walk back to start pos logic
-        if (( p1 != null && distancetoObject(this, p1) < (radius+1)*GamePanel.tileSize ? ((x < p1.x && x > startX) || (x > p1.x && x < startX)) : true) && (distancetoObject(this, p2) < (radius+1)*GamePanel.tileSize ? ((x < p2.x && x > startX) || (x > p2.x && x < startX)) : true)) {
+        if (( p1 != null && distanceToObject(this, p1) < (radius+1)*GamePanel.tileSize ? ((x < p1.x && x > startX) || (x > p1.x && x < startX)) : true) && (p2 != null && distanceToObject(this, p2) < (radius+1)*GamePanel.tileSize ? ((x < p2.x && x > startX) || (x > p2.x && x < startX)) : true)) {
             if(distancetoPos(startX,startY) > speed)
                 moveTowards(startX, startY);
         }

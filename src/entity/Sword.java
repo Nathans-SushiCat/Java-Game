@@ -103,7 +103,7 @@ public class Sword extends Entity {
     public void draw(Graphics2D g2) {
         BufferedImage image;
 
-        if(!punch){
+        if(!punch || connectedToEntity == null){
             if(spriteNum == 1){
                 g2.drawImage(image1, x + (xScale == -1 ? GamePanel.scale*10: 0 ), y, GamePanel.tileSize * xScale, GamePanel.tileSize, null);
             }else {
@@ -113,7 +113,7 @@ public class Sword extends Entity {
 
             spriteNum++;
 
-            if(connectedToEntity.direction.equals("up") || connectedToEntity.direction.equals("down")){
+            if( connectedToEntity.direction.equals("up") || connectedToEntity.direction.equals("down")){
                 image = image3;
                 sizeVertical = 10 * GamePanel.scale;
                 sizeHorizontal = 5* GamePanel.scale;

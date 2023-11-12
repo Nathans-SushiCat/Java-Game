@@ -1,8 +1,10 @@
 package World;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class AudioController {
     public static synchronized void playSound(final String url) {
@@ -23,6 +25,25 @@ public class AudioController {
             }
         }).start();
     }
+    public static float AudioFileLength(String fileString) {
+        URL url = AudioController.class.getResource("/Resources/Audio/" + fileString);
+        if (url == null) {
+            // Handle the case where the resource is not found
+            return 0;
+        }
+
+        try {
+            File file = new File(url.toURI());
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+            AudioFormat format = audioInputStream.getFormat();
+            long frames = audioInputStream.getFrameLength();
+            return (float) ((frames + 0.0) / format.getFrameRate());
+        } catch (UnsupportedAudioFileException | IOException  | URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public static void playTypeWriterSound(){
         playSound("TypeWriter.wav");
     }
@@ -65,5 +86,10 @@ public class AudioController {
     public static void playDropSound(){
         playSound("Drop.wav");
     }
+    public static void playBackGroundMusicSound(){
+        playSound("Java-Game.wav");
+    }
+
+
 
 }

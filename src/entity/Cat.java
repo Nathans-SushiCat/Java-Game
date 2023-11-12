@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Cat extends Entity{
@@ -76,7 +75,7 @@ public class Cat extends Entity{
             Owner = null;
 
         if(Owner != null && !fat && !angry){
-            float distanceToOwner = distancetoObject(this, Owner);
+            float distanceToOwner = distanceToObject(this, Owner);
             if( distanceToOwner > 3* GamePanel.tileSize)
                 moveTowards(Owner.x, Owner.y);
             else
@@ -87,7 +86,7 @@ public class Cat extends Entity{
                 y = Owner.y;
             }
         }
-        if(fat)
+        if(fat || Owner == null)
             moving = false;
         spriteCounter ++;
         int animationSpeed = moving ? 10 : 45;

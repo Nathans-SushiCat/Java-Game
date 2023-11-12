@@ -22,6 +22,7 @@ public class Crate extends Entity{
         getSprite();
         this.x = x;
         this.y = y;
+
     }
     public Crate(GamePanel gp, KeyHandler keyH){
 
@@ -35,6 +36,8 @@ public class Crate extends Entity{
         y = 300;
         solid = true;
         speed = 2;
+        sizeVertical = gp.tileSize;
+        sizeHorizontal = gp.tileSize;
     }
     public void getSprite(){
         try {
@@ -46,28 +49,37 @@ public class Crate extends Entity{
 
     @Override
     public void update(){
+        moving = false;
     }
     @Override
     public void handleCollision(Collision collision) {
         // Handle the collision, e.g., change the object's state
-        if (collision.hasCollided()) {
+        if (collision.hasCollided() && !(collision.collidedEntity instanceof BigSword)) {
             // Handle the collision direction
             switch (collision.getDirection()) {
                 case TOP:
-                    if(!HasSolidInDirection(Collision.CollisionDirection.DOWN))
+                    if(!HasSolidInDirection(Collision.CollisionDirection.DOWN) && !moving){
                         y-=speed;
+                        moving = true;
+                    }
                     break;
                 case DOWN:
-                    if(!HasSolidInDirection(Collision.CollisionDirection.TOP))
+                    if(!HasSolidInDirection(Collision.CollisionDirection.TOP) && !moving){
                         y+=speed;
+                        moving = true;
+                    }
                     break;
                 case RIGHT:
-                    if(!HasSolidInDirection(Collision.CollisionDirection.LEFT))
+                    if(!HasSolidInDirection(Collision.CollisionDirection.LEFT) && !moving){
                         x+=speed;
+                        moving = true;
+                    }
                     break;
                 case LEFT:
-                    if(!HasSolidInDirection(Collision.CollisionDirection.RIGHT))
+                    if(!HasSolidInDirection(Collision.CollisionDirection.RIGHT) && !moving){
                         x-=speed;
+                        moving = true;
+                    }
                     break;
                 case NONE:
                     break;

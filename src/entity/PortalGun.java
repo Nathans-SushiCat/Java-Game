@@ -81,9 +81,9 @@ public class PortalGun extends Entity {
 
             if (portalA == null) {
                 if(portalB != null)
-                    portalA = new Portal(gp, x, y, portalB, 1);
+                    portalA = new Portal(gp, connectedToEntity.x, connectedToEntity.y - GamePanel.tileSize/2, portalB, 1);
                 else
-                    portalA = new Portal(gp, x, y);
+                    portalA = new Portal(gp, connectedToEntity.x, connectedToEntity.y - GamePanel.tileSize/2);
 
                 gp.entities.add(portalA);
                 if (index == 1)
@@ -91,7 +91,7 @@ public class PortalGun extends Entity {
                 else
                     keyH.actionPressed2 = false;
             } else {
-                portalB = new Portal(gp, x, y, portalA,2);
+                portalB = new Portal(gp, connectedToEntity.x, connectedToEntity.y - GamePanel.tileSize/2, portalA,2);
 
                 gp.entities.add(portalB);
                 if (index == 1)
@@ -100,8 +100,8 @@ public class PortalGun extends Entity {
                     keyH.actionPressed2 = false;
             }
         }
-        x = connectedToEntity.x + (3 * GamePanel.scale);
-        y = connectedToEntity.y + (4 * GamePanel.scale);
+        x = connectedToEntity.x + (connectedToEntity.direction.equals("left") ? 0 : (6 * GamePanel.scale));
+        y = connectedToEntity.y + (10 * GamePanel.scale);
         if (connectedToEntity.direction.equals("idle"))
             spriteNum = connectedToEntity.spriteNum;
         else

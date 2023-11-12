@@ -9,8 +9,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static World.AudioController.playHurtDingeldodelSound;
-
 public class Entity implements Collidable {
     public int x;
     public int y;
@@ -69,15 +67,15 @@ public class Entity implements Collidable {
     public int spriteNum = 1;
     public boolean teleportable = true;
 
-    public float distancetoObject(Entity object1, Entity object2){
+    public float distanceToObject(Entity object1, Entity object2){
         float x1,x2,y1,y2;
         if(object1 == null || object2 == null)
             return 0;
 
-        x1 = object1.x;
-        y1 = object1.y;
-        x2 = object2.x;
-        y2 = object2.y;
+        x1 = object1.x+ object1.sizeHorizontal/2f;
+        y1 = object1.y+ object1.sizeVertical/2f;;
+        x2 = object2.x+ object2.sizeHorizontal/2f;;
+        y2 = object2.y+ object2.sizeVertical/2f;;
         float deltaX, deltaY;
         if(x1 < x2){
             deltaX = x2-x1;
@@ -227,6 +225,14 @@ public class Entity implements Collidable {
     public void handleNoCollision() {
     }
 
+    public boolean currentlyCollidingWith(Entity entity){
+        for(Collision c : collisions){
+            if(c.collidedEntity != null &&  c.collidedEntity.equals(entity) && c.collided){
+                return true;
+            }
+        }
+        return false;
+    }
     public void handleCollision(Collision collision, Entity ignore) {
         // Handle the collision, e.g., change the object's state
         if ( collision.hasCollided()) {

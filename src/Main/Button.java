@@ -1,15 +1,11 @@
 package Main;
 
-import World.AudioController;
-import entity.Ein_Etwas_Bullet;
 import entity.Entity;
 import entity.Player;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.IndexColorModel;
 import java.io.IOException;
 
 public class Button extends Entity {
@@ -49,8 +45,6 @@ public class Button extends Entity {
     }
     @Override
     public void draw(Graphics2D g2){
-        g2.drawString("x",x,y);
-        g2.drawString("x",x+sizeHorizontal,y+sizeVertical);
         g2.setFont(gp.boldFont);
         BufferedImage image = ButtonDownImages[buttonPressIndex];
 
@@ -61,7 +55,7 @@ public class Button extends Entity {
 
     @Override
     public void update(){
-        if(pressed && connectedToEntity != null && distancetoObject(this, connectedToEntity) > GamePanel.tileSize){
+        if(pressed && connectedToEntity != null && distanceToObject(this, connectedToEntity) > GamePanel.tileSize){
             //ButtonPressed();
         }
 

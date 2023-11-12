@@ -54,7 +54,7 @@ public class Ein_Etwas extends Entity{
             active = false;
 
         if(lastShootTime >= shootInterval){
-            gp.entities.add(new Ein_Etwas_Bullet(gp, x, y+2*GamePanel.scale, 7, this));
+            gp.entities.add(new Ein_Etwas_Bullet(gp, x, y+2*gp.scale, 7, this));
             lastShootTime = 0;
         }
         if(active)
@@ -93,7 +93,7 @@ public class Ein_Etwas extends Entity{
                 image = image2;
         }
 
-        g2.drawImage(image, x, y, GamePanel.tileSize, GamePanel.tileSize, null);
+        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
 
     }
 

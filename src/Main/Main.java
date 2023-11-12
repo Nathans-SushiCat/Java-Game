@@ -14,6 +14,8 @@ public class Main {
         //window.setUndecorated(true);
         window.setTitle("Java-Game");
 
+        //GamePanel.scale = GamePanel.getScale();
+        //GamePanel.tileSize = GamePanel.originalTileSize*GamePanel.scale;
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
 

@@ -1,5 +1,6 @@
 package entity;
 
+import Main.Collision;
 import Main.GamePanel;
 import Main.KeyHandler;
 import World.AudioController;
@@ -20,15 +21,18 @@ public class Player extends Entity {
     int immunityTimer;
     Entity droppedItem;
 
+    String name;
     ArrayList<Heart> hearts = new ArrayList<Heart>();
-    public Player(GamePanel gp, KeyHandler keyH){
+    public Player(GamePanel gp, KeyHandler keyH, String name){
         this.gp = gp;
         this.keyH = keyH;
         getPlayerImage();
         setDefaultValues();
+        sizeHorizontal = 15*GamePanel.scale;
+        this.name = name;
         playerIndex = 0;
     }
-    public Player(GamePanel gp, KeyHandler keyH, int x, int y, int playerIndex){
+    public Player(GamePanel gp, KeyHandler keyH, int x, int y, int playerIndex, String name){
         this.gp = gp;
         this.keyH = keyH;
         if(playerIndex == 1)
@@ -37,8 +41,10 @@ public class Player extends Entity {
             getPlayer2Image();
         setDefaultValues();
         this.playerIndex = playerIndex;
+        sizeHorizontal = 15*GamePanel.scale;
         this.x = x;
         this.y = y;
+        this.name = name;
     }
     public void setDefaultValues(){
         x = 100;
@@ -116,10 +122,6 @@ public class Player extends Entity {
 
     @Override
     public void update(){
-
-        if(droppedItem != null && distancetoObject(this, droppedItem) > GamePanel.tileSize)
-            droppedItem = null;
-
         //Key Inputs
         if(playerIndex == 1){
             if(keyH.upPressed && !LockY_P){
@@ -188,6 +190,10 @@ public class Player extends Entity {
             }
             spriteCounter = 0;
         }
+
+        if(!currentlyCollidingWith(droppedItem)){
+            droppedItem = null;
+        }
     }
 
     @Override
@@ -233,8 +239,6 @@ public class Player extends Entity {
     @Override
     public void draw(Graphics2D g2){
 
-         // g2.setColor(Color.WHITE)
-        // g2.fillRect(x,y,gp.tileSize, gp.tileSize);
         BufferedImage image = null;
         switch (direction){
             case "down":
@@ -282,12 +286,12 @@ public class Player extends Entity {
         g2.drawImage(image, x, y, size, size, null);
 
         if(playerIndex == 1){
-            g2.drawString("Sushicat", x+(size/2)-(g2.getFontMetrics().stringWidth("Sushicat")/2), y-5);
+            g2.drawString(name, x+(size/2)-(g2.getFontMetrics().stringWidth(name)/2), y-5);
             for(int i = 0; i < hearts.size(); i++){
                 g2.drawImage(hearts.get(i).image, 10 + (size/2)*i,10,size/2, size/2, null);
             }
         }else {
-            g2.drawString("Schmillizidado", x+(size/2)-(g2.getFontMetrics().stringWidth("Schmillizidado")/2), y-5);
+            g2.drawString(name, x+(size/2)-(g2.getFontMetrics().stringWidth(name)/2), y-5);
             for(int i = 0; i < hearts.size(); i++){
                 g2.drawImage(hearts.get(i).image, 10 + (size/2)*i,15+ size/2,size/2, size/2, null);
             }

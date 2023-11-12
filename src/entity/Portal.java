@@ -24,6 +24,7 @@ public class Portal extends Entity {
         this.y = y;
         solid = false;
         teleportable = false;
+        sizeVertical = GamePanel.tileSize *2;
     }
 
     public Portal(GamePanel gp, int x, int y, Portal connectedPortal, int spriteType) {
@@ -40,6 +41,7 @@ public class Portal extends Entity {
         solid = false;
         this.connectedPortal = connectedPortal;
         connectedPortal.connectedPortal = this;
+        sizeVertical = GamePanel.tileSize *2;
     }
 
 
@@ -79,16 +81,9 @@ public class Portal extends Entity {
             tpCooldown--;
         }else {
             for(int i = 0; i < touchedEntitys.size(); i++){
-                boolean colliding = false;
-                for(Collision c : collisions){
-                    if(c.collidedEntity != null &&  c.collidedEntity.equals(touchedEntitys.get(i)) && c.collided){
-                        colliding = true;
-                        break;
-                    }
-                }
-                //If The Entity does not collide with portal anymore it gets reset
-                if(!colliding)
+                if(!currentlyCollidingWith(touchedEntitys.get(i))){
                     touchedEntitys.remove(touchedEntitys.get(i));
+                }
             }
         }
     }

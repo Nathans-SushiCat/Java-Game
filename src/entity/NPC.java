@@ -100,7 +100,7 @@ public class NPC extends Entity{
             image = idle2;
         }
 
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
-        g2.drawString(name, x+(gp.tileSize/2)-(g2.getFontMetrics().stringWidth(name)/2), y-5);
+        g2.drawImage(image, x, y, GamePanel.tileSize, GamePanel.tileSize, null);
+        g2.drawString(name, x+(GamePanel.tileSize /2)-(g2.getFontMetrics().stringWidth(name)/2), y-5);
     }
 }

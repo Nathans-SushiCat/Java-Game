@@ -70,7 +70,8 @@ public class Lava extends Entity{
                 player.removeLife();
 
             }
-            collision.collidedEntity.removeLife();
+            if(collision.collidedEntity.lifes > 0)
+                collision.collidedEntity.removeLife();
         }
     }
 
