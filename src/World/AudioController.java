@@ -52,8 +52,6 @@ public class AudioController {
         }).start();
     }
 
-
-
     public static float AudioFileLength(String url) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(AudioController.class.getResource("/Resources/Audio/" + url)));
@@ -112,6 +110,9 @@ public class AudioController {
     }
     public static void playBackGroundMusicSound(){
         playBackGroundMusic("Java-Game.wav");
+    }
+    public static void playCartridgeSound(){
+        playSound("Cartridge.wav");
     }
     public static void playBackGroundMusicGameBoySound(){
         playBackGroundMusic("GameBoyMusic.wav");

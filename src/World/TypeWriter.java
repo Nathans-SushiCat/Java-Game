@@ -2,10 +2,8 @@ package World;
 
 import Main.GamePanel;
 import Main.SimpleEntity;
-import jdk.jfr.Description;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class TypeWriter extends SimpleEntity {
 

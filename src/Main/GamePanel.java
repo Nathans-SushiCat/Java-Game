@@ -6,7 +6,6 @@ import entity.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,7 +27,6 @@ public class GamePanel extends JPanel implements Runnable{
     public static final int screenHeight = tileSize * maxScreenRow;
     int FPS = 60;
     int backgroundMusicTimer = 0;
-
     int Room;
 
 
@@ -62,6 +60,9 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
         LoadRoom(0);
+    }
+    public void changeFPS(int FPS){
+        this.FPS = FPS;
     }
     public int getHorizontalScreenMid(int width){
         return tileSize*maxScreenCol/2 - (width/2);
@@ -143,10 +144,9 @@ public class GamePanel extends JPanel implements Runnable{
         double nextDrawTime = System.nanoTime() + drawInterval;
 
         while (gameThread != null){
+
             // 1 UPDATE: update information
             update();
-
-
             //2 DRAW: draw the screen
             repaint();
 
@@ -234,7 +234,6 @@ public class GamePanel extends JPanel implements Runnable{
         for (SimpleEntity e : simpleEntities){
             e.draw(g2);
         }
-
         g2.dispose();
     }
 }

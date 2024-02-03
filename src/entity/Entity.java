@@ -129,13 +129,16 @@ public class Entity implements Collidable {
             return;
         }
         // Move towards the target with the specified speed
+        boolean moved = false;
         if(!LockY_P && directionY > 0){
             y += (int)(directionY * speed);
             direction = "up";
+            moved = true;
         }
         else if(!LockY_N && directionY < 0){
             y += (int)(directionY * speed);
             direction = "down";
+            moved = true;
         }else {
             direction = "idle";
         }
@@ -146,7 +149,7 @@ public class Entity implements Collidable {
         else if(!LockX_N && directionX < 0){
             x += (int)(directionX * speed);
             direction = "left";
-        }else {
+        }else if(!moved){
             direction = "idle";
         }
     }
