@@ -21,7 +21,8 @@ public class Player extends Entity {
     int immunityTimer;
     Entity droppedItem;
 
-    String name;
+    public String name;
+
     ArrayList<Heart> hearts = new ArrayList<Heart>();
     public Player(GamePanel gp, KeyHandler keyH, String name){
         this.gp = gp;

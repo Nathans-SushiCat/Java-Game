@@ -79,6 +79,9 @@ public class Button extends Entity {
             gp.LoadRoom(2);
         }
         if(onClickFunction == 3){
+            gp.LoadRoom(3);
+        }
+        if(onClickFunction == 4){
             System.exit(0);
         }
     }

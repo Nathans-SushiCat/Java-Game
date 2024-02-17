@@ -11,6 +11,7 @@ import java.io.IOException;
 public class Gameboy extends Entity{
     TypeWriter writer;
 
+    Gameboy_BitBullet bitBullet;
     Phase phase;
 
     BufferedImage[] loadingImages = new BufferedImage[8];
@@ -25,28 +26,30 @@ public class Gameboy extends Entity{
 
     public Cartridge cartridge;
     int phaseSection= 0;
+    boolean cartridgePlaced = false;
 
     enum Phase{
         NONE,
         START,
         LOADING,
-        GAME1,
-        GAME2
+        SLOWTIME,
+        GAME2,
+        Game3
     }
     public Gameboy(GamePanel gp, int x, int y){
         this.gp = gp;
         this.x = x;
         this.y = y;
         speed = 10;
-        this.lifes = 10;
+        this.lifes = 100;
         sizeHorizontal = 14*GamePanel.scale;
         sizeVertical = GamePanel.tileSize;
-        phase = Phase.LOADING;
+        phase = Phase.START;
         solid = true;
         direction = "left";
         writer = new TypeWriter(x,y-GamePanel.scale*6, 4f, 15);
         getSprites();
-        healthBar = new HealthBar(gp,this);
+        healthBar = new HealthBar(gp,this, gp.getHorizontalScreenMid(lifes*GamePanel.scale), GamePanel.scale*5);
     }
 
     public void getSprites() {
@@ -81,14 +84,14 @@ public class Gameboy extends Entity{
                 if(currentTextIndex+1 < startTexts.length)
                     currentTextIndex++;
                 else{
-                    phase = Phase.GAME1;
+                    phase = Phase.LOADING;
                     currentTextIndex = 0;
                 }
             }
 
         }else if(phase.equals(Phase.LOADING)){
             if(totalLoadingTime > 320){
-                phase = Phase.GAME1;
+                phase = Phase.values()[(int)(Math.random()*(5-3)+3 )];
                 totalLoadingTime = 0;
             }
 
@@ -97,25 +100,49 @@ public class Gameboy extends Entity{
             else
                 currentLoadingIndex = 1;
             totalLoadingTime++;
-        }else if (phase.equals(Phase.GAME1)){
-            switch (phaseSection){
+        }else if (phase.equals(Phase.SLOWTIME)) {
+            switch (phaseSection) {
                 case 0:
-                    moveTowards(GamePanel.tileSize*4, y);
-                    if(direction.equals("idle")){
+                    moveTowards(GamePanel.tileSize * 4, y);
+                    if (direction.equals("idle")) {
                         phaseSection++;
                     }
                     break;
                 case 1:
-                    moveTowards(GamePanel.tileSize*10, y);
-                    if(direction.equals("idle"))
+                    moveTowards(GamePanel.tileSize * 10, y);
+                    if (direction.equals("idle"))
                         phaseSection++;
                     break;
                 case 2:
-                    phase = Phase.NONE;
-                    cartridge = new Cartridge(gp,this, Cartridge.Cart.SLOWTIME, x-GamePanel.scale,y-(5*GamePanel.tileSize), x-GamePanel.scale,y);
-                    phaseSection = 0;
+                    if (!cartridgePlaced) {
+                        cartridge = new Cartridge(gp, this, Cartridge.Cart.SLOWTIME, x - GamePanel.scale, y - (5 * GamePanel.tileSize), x - GamePanel.scale, y);
+                        cartridgePlaced = true;
+                    }
+                    if (cartridge == null) {
+                        writer.changeText("I can controll the time");
+                        gp.changeFPS(30);
+                        phaseSection++;
+                    }
                     break;
                 case 3:
+                    if (writer.finished)
+                        phaseSection++;
+                    break;
+                case 4:
+                    writer.changeText("be ready for this");
+                    phaseSection++;
+                    break;
+                case 5:
+                    if (writer.finished) {
+                        gp.changeFPS(120);
+                        phaseSection++;
+                    }
+                    break;
+                case 6:
+                    if (!gp.entities.contains(bitBullet)) {
+                        bitBullet = new Gameboy_BitBullet(gp, x + 4, y - 1, 3, this);
+                        gp.entities.add(bitBullet);
+                    }
                     break;
             }
         }

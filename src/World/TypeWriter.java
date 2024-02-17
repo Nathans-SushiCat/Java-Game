@@ -13,6 +13,7 @@ public class TypeWriter extends SimpleEntity {
     private String currentText = "";
     public String text;
     private float speed;
+    boolean makeSound = true;
 
     private boolean multipleTextsMode = false;
     private int currentChar;
@@ -24,8 +25,9 @@ public class TypeWriter extends SimpleEntity {
     public int waitTimeMultiplier;
 
     /**
-     * @param speed higher speed means it takes longer 60 = 1/s
+     * @param speed higher speed means it takes longer x * 1/s
     */
+
     public TypeWriter(String text, int x, int y , float speed, int multiplier){
         this.x = x;
         this.y = y;
@@ -42,6 +44,16 @@ public class TypeWriter extends SimpleEntity {
         waitTimeMultiplier = 4;
         waitTime = speed*waitTimeMultiplier;
     }
+    public TypeWriter(String text, int x, int y , float speed, boolean sound){
+        this.x = x;
+        this.y = y;
+        this.text = text;
+        this.speed = speed;
+        waitTimeMultiplier = 4;
+        waitTime = speed*waitTimeMultiplier;
+        makeSound = sound;
+    }
+
 
 
     public TypeWriter(String[] texts, int x, int y, float speed){
@@ -74,11 +86,11 @@ public class TypeWriter extends SimpleEntity {
     }
 
     public void changeText(String text){
+        finished = false;
         this.text = text;
         resetvals();
         waitTime = speed*waitTimeMultiplier;
         multipleTextsMode = false;
-
     }
 
     public void changeText(String text, float speed){
@@ -146,7 +158,7 @@ public class TypeWriter extends SimpleEntity {
 
     public void addNextChar(Character nextChar){
         currentText+= nextChar;
-        if(nextChar != ' ')
+        if(makeSound && nextChar != ' ')
             AudioController.playTypeWriterSound();
     }
 

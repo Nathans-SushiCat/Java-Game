@@ -64,7 +64,6 @@ public class Cartridge extends Entity {
         if (slotetIn){
             AudioController.playCartridgeSound();
             ((Gameboy)connectedToEntity).cartridge = null;
-            gp.changeFPS(10);
         }
     }
 

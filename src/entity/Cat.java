@@ -6,6 +6,8 @@ import World.AudioController;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
@@ -18,6 +20,7 @@ public class Cat extends Entity{
     HealthBar healthBar;
     BufferedImage FatIdle1, FatIdle2, FatEat1, FatEat2;
 
+    boolean hovered = false;
     int lvl = 0;
 
     int maxLifes;
@@ -27,9 +30,13 @@ public class Cat extends Entity{
     int EatingWaitTimer = 0;
     int EatingWaitTime = 180;
     int EatIndex;
+    boolean WhiteCat;
+    String name;
 
 
     public Cat(GamePanel gp, int x, int y, int speed){
+        WhiteCat = false;
+        name = "Gato";
         this.gp = gp;
         this.x = x;
         this.y = y;
@@ -40,6 +47,45 @@ public class Cat extends Entity{
         lifes = 14;
         maxLifes = lifes;
         healthBar = new HealthBar(gp,this);
+        addMouseListener();
+    }
+
+    public Cat(GamePanel gp, int x, int y, int speed, boolean white){
+        WhiteCat = white;
+        this.gp = gp;
+        this.x = x;
+        this.y = y;
+        solid = true;
+        this.speed = speed;
+        teleportable = true;
+        lifes = 14;
+        maxLifes = lifes;
+        healthBar = new HealthBar(gp,this);
+        if(white){
+            getSpritesWhite();
+            name = "White";
+        }
+        else{
+            getSprites();
+            name = "Gato";
+        }
+        addMouseListener();
+    }
+
+    private void addMouseListener(){
+        gp.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                super.mouseMoved(e);
+                if (getBounds().contains(e.getPoint())) {
+                    hovered = true;
+                }else
+                    hovered = false;
+            }
+        });
+    }
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, sizeHorizontal, sizeVertical);
     }
 
     public void getSprites(){
@@ -60,6 +106,27 @@ public class Cat extends Entity{
             e.printStackTrace();
         }
     }
+
+    public void getSpritesWhite(){
+        try {
+            image1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Angry-Cat-Idle1.png")));
+            image2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Angry-Cat-Idle2.png")));
+            image3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Angry-Cat-Walk1.png")));
+            image4 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/Angry-Cat-Walk2.png")));
+            idle1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/WhiteCat/Cutie-Cat-Idle1.png")));
+            idle2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/WhiteCat/Cutie-Cat-Idle2.png")));
+            up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/WhiteCat/Cutie-Cat-Walk1.png")));
+            up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/WhiteCat/Cutie-Cat-Walk2.png")));
+            FatEat1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/WhiteCat/Cutie-Fatty-Cat-Eat1.png")));
+            FatEat2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/WhiteCat/Cutie-Fatty-Cat-Eat2.png")));
+            FatIdle1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/WhiteCat/Cutie-Fatty-Cat2.png")));
+            FatIdle2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Resources/Cat/WhiteCat/Cutie-Fatty-Cat2.png")));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+
     public void update() {
 
         healthBar.maxLifes = maxLifes;
@@ -165,9 +232,10 @@ public class Cat extends Entity{
             else
                 image = spriteNum == 1 ? FatEat1 : FatEat2;
         }
-
+        if(hovered)
+            g2.drawString(name, x,y+GamePanel.scale);
         g2.drawString("lvl "+ lvl, x,y-GamePanel.scale);
-        g2.drawImage(image, x+ ((direction == "right") ? GamePanel.tileSize : 0),y, GamePanel.tileSize * ((direction == "right") ? -1 : 1), GamePanel.tileSize, null);
+        g2.drawImage(image, x+ ((Objects.equals(direction, "right")) ? GamePanel.tileSize : 0),y, GamePanel.tileSize * ((Objects.equals(direction, "right")) ? -1 : 1), GamePanel.tileSize, null);
     }
 
     @Override

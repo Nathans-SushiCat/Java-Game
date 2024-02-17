@@ -11,11 +11,21 @@ public class HealthBar extends Entity{
 
     Entity connectedEntity;
     int maxLifes;
+    boolean customPos = false;
     public HealthBar(GamePanel gp,  Entity connectedEntity) {
         this.connectedEntity = connectedEntity;
         maxLifes = connectedEntity.lifes;
         this.gp = gp;
         getSprites();
+    }
+    public HealthBar(GamePanel gp,  Entity connectedEntity, int Xpos, int Ypos) {
+        this.connectedEntity = connectedEntity;
+        maxLifes = connectedEntity.lifes;
+        this.gp = gp;
+        getSprites();
+        x = Xpos;
+        y = Ypos;
+        customPos = true;
     }
 
         public void getSprites(){
@@ -29,8 +39,10 @@ public class HealthBar extends Entity{
     @Override
     public void update(){
         lifes = connectedEntity.lifes;
-        x = connectedEntity.x + (int)((GamePanel.originalTileSize-maxLifes)/2f*GamePanel.scale);
-        y = connectedEntity.y - GamePanel.scale;
+        if(!customPos){
+            x = connectedEntity.x + (int)((GamePanel.originalTileSize-maxLifes)/2f*GamePanel.scale);
+            y = connectedEntity.y - GamePanel.scale;
+        }
     }
 
     @Override

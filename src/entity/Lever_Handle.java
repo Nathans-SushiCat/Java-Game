@@ -19,7 +19,7 @@ public class Lever_Handle extends Entity{
         RIGHT,
         NONE
     }
-    State currentState = State.NONE;
+    public State currentState = State.NONE;
     public Lever_Handle(GamePanel gp, KeyHandler keyH, int x, int y, Lever lever){
         this.gp = gp;
         this.keyH = keyH;

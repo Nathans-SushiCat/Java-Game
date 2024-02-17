@@ -7,18 +7,19 @@ public class KeyHandler implements KeyListener {
 
     public boolean upPressed, downPressed, leftPressed, rightPressed, actionPressed, dropPressed;
     public boolean upPressed2, downPressed2, leftPressed2, rightPressed2, actionPressed2, dropPressed2;
+    public boolean actionReleased, actionReleased2;
 
     public boolean esc, F11, space;
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int code = e.getKeyCode();
 
+
+        int code = e.getKeyCode();
         //Managing
         if(code == KeyEvent.VK_ESCAPE){
             esc = true;
@@ -46,6 +47,7 @@ public class KeyHandler implements KeyListener {
 
         //Action
         if(code == KeyEvent.VK_E){
+            actionReleased = false;
             actionPressed = true;
         }
         if(code == KeyEvent.VK_Q){
@@ -68,6 +70,7 @@ public class KeyHandler implements KeyListener {
 
         //Action Player 2
         if(code == KeyEvent.VK_CONTROL){
+            actionReleased2 = false;
             actionPressed2 = true;
         }
         if(code == KeyEvent.VK_SHIFT){
@@ -109,6 +112,7 @@ public class KeyHandler implements KeyListener {
         //Action
         if(code == KeyEvent.VK_E){
             actionPressed = false;
+            actionReleased = true;
         }
         if(code == KeyEvent.VK_Q){
             dropPressed = false;
@@ -131,6 +135,7 @@ public class KeyHandler implements KeyListener {
         //Action Player 2
         if(code == KeyEvent.VK_CONTROL){
             actionPressed2 = false;
+            actionReleased2 = true;
         }
         if(code == KeyEvent.VK_SHIFT){
             dropPressed2 = false;

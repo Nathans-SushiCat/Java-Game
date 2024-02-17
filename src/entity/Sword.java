@@ -98,6 +98,10 @@ public class Sword extends Entity {
         else if(!punch)
             spriteNum = 1;
 
+        if(!punch){
+            sizeVertical = 9 * GamePanel.scale;
+            sizeHorizontal = 9 * GamePanel.scale;
+        }
     }
 
     @Override

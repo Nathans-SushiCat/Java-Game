@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Lever extends Entity{
     KeyHandler keyH;
-    Lever_Handle leverHandle;
+    public Lever_Handle leverHandle;
     public Lever(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;

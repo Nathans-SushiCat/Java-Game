@@ -1,7 +1,7 @@
 package Main;
 
-import World.AudioController;
-import World.TypeWriter;
+import World.*;
+import World.TextField;
 import entity.*;
 
 import javax.swing.*;
@@ -18,8 +18,10 @@ public class GamePanel extends JPanel implements Runnable{
     //SCREEN SETTINGS
     public static final int originalTileSize = 16;
     public static int scale = 5;
+    public static Font dafaultFont = new Font ("Consolas", Font.PLAIN, 12);
     public Font mainFont = new Font ("Consolas", Font.PLAIN, 12);
     public Font boldFont = new Font ("Consolas", Font.BOLD, 30);
+    public Font iconFont = new Font("Segoe MDL2", Font.PLAIN, 12);
     public static int tileSize = originalTileSize * scale;
     static final int maxScreenCol = 16;
     static final int maxScreenRow = 9;
@@ -28,11 +30,15 @@ public class GamePanel extends JPanel implements Runnable{
     int FPS = 60;
     int backgroundMusicTimer = 0;
     int Room;
+    private double drawInterval;
+    long startTime = System.nanoTime();
+    long previousTime = startTime;
+    int frames = 0;
+    double actualFPS= 0;
 
 
     public static int getScale(){
         String filePath = "file.txt";
-
         try {
             Path resourcePath = Paths.get(Objects.requireNonNull(GamePanel.class.getClassLoader().getResource(filePath)).toURI());
             return Integer.parseInt(Files.readString(resourcePath));
@@ -59,10 +65,12 @@ public class GamePanel extends JPanel implements Runnable{
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
-        LoadRoom(0);
+        LoadRoom(3);
     }
     public void changeFPS(int FPS){
         this.FPS = FPS;
+        drawInterval = 1000000000/FPS;
+
     }
     public int getHorizontalScreenMid(int width){
         return tileSize*maxScreenCol/2 - (width/2);
@@ -72,22 +80,25 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void LoadRoom(int Room){
+        changeFPS(60);
         this.Room = Room;
         entities.clear();
         simpleEntities.clear();
         if(Room == 0){
             backgroundMusicTimer = 0;
-            entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) - (int)(tileSize*1.5), 1, "START"));
-            entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) , 2, "GAMEBOY"));
-            entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) + (int)(tileSize*1.5), 3, "EXIT"));
-            entities.add(new Player(this, keyH,100,300, 1, "Sushicat"));
-            entities.add(new Player(this, keyH,100,400, 2, "Schmillizidado"));
+            entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) - (int)(tileSize*2.25), 1, "START"));
+            entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize)  - (int)(tileSize*0.75), 2, "GAMEBOY"));
+            entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize)  + (int)(tileSize*0.75), 3, "Name"));
+            entities.add(new Button(this,getHorizontalScreenMid(tileSize*2), getVerticalScreenMid(tileSize) + (int)(tileSize*2.25), 4, "EXIT"));
+            entities.add(new Player(this, keyH,100,300, 1,  DataManager.saveData.playerName1));
+            entities.add(new Player(this, keyH,100,400, 2,  DataManager.saveData.playerName2));
             entities.add(new R141496());
+            simpleEntities.add(new TypeWriter("Version 0.1.6.2",2*GamePanel.scale,GamePanel.screenHeight-GamePanel.scale, 3, false));
 
         }else if(Room == 1){
             TypeWriter typeWriter = new TypeWriter("Hello i am the Human",400,300, 5);
             simpleEntities.add(typeWriter);
-            typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.6"}, 4);
+            typeWriter.changeTexts(new String[]{"Hello there","Welcome to Java-Game", "Version 0.1.6.2"}, 4);
 
             Lever lever = new Lever(this,keyH, 250,100, Lever_Handle.State.LEFT);
             Lever lever2 = new Lever(this, keyH, 250, 450, Lever_Handle.State.RIGHT);
@@ -98,12 +109,12 @@ public class GamePanel extends JPanel implements Runnable{
 
             Collections.addAll(entities,
                     new Crate(this, keyH, 400, 200),
-                    new Lava(this, keyH, tileSize*14,30),
-                    new Lava(this, keyH, tileSize*14,30),
-                    new Lava(this, keyH, (int) (tileSize*14.5),30),
-                    new Lava(this, keyH, (int) (tileSize*14.5),50),
-                    new Lava(this, keyH, tileSize*15,20),
-                    new Lava(this, keyH, tileSize*15,50),
+                    new Lava(this, keyH, tileSize*14,scale*6),
+                    new Lava(this, keyH, tileSize*14,scale*6),
+                    new Lava(this, keyH, (int) (tileSize*14.5),scale*6),
+                    new Lava(this, keyH, (int) (tileSize*14.5),scale*10),
+                    new Lava(this, keyH, tileSize*15,scale*4),
+                    new Lava(this, keyH, tileSize*15,scale*10),
                     new NPC(this, keyH, "NPC", new String[]{"Hello", "my friend", "What's up?", "have you already done your homework?"}, 5),
                     new Spike(this, keyH, 500, tileSize, lever),
                     new Spike(this, keyH, 500+tileSize, tileSize, lever),
@@ -112,9 +123,10 @@ public class GamePanel extends JPanel implements Runnable{
                     new Sushi(this, keyH,200, 600,1),
                     new Sushi(this, keyH,200+tileSize, 600,1),
                     new Sushi(this, keyH,200+tileSize*2, 600,1),
-                    new Cat(this, 100,500, 4),
-                    new Player(this, keyH,100,400, 2, "Schmillizidado"),
-                    new Player(this, keyH,100,300, 1, "Sushicat"),
+                    new Cat(this, 100,500, 4, false),
+                    new Cat(this, 100,600, 4, true),
+                    new Player(this, keyH,100,400, 2, DataManager.saveData.playerName1),
+                    new Player(this, keyH,100,300, 1, DataManager.saveData.playerName2),
                     new PortalGun(this, keyH, 500, 400, 60),
                     new Sword(this, keyH, 500, 500, 30),
                     new BigSword(this, keyH, 500, 600, 30),
@@ -128,22 +140,65 @@ public class GamePanel extends JPanel implements Runnable{
         }else if(Room == 2){
             backgroundMusicTimer = 0;
 
-            entities.add(new Player(this, keyH,100,400, 2, "Schmillizidado"));
-            entities.add(new Player(this, keyH,100,300, 1, "Sushicat"));
+            entities.add(new Player(this, keyH,100,400, 1, DataManager.saveData.playerName1));
+            entities.add(new Player(this, keyH,100,300, 2, DataManager.saveData.playerName2));
+            entities.add(new R141496());
             entities.add(new Gameboy(this, GamePanel.tileSize*10, GamePanel.tileSize*4));
+        }else if(Room == 3){
+
+            World.TextField txt = new TextField("", boldFont,14, getHorizontalScreenMid(0), getVerticalScreenMid(0));
+            Lever lever = new Lever(this, keyH, getHorizontalScreenMid(tileSize), tileSize*6, Lever_Handle.State.RIGHT);
+
+            Collections.addAll(entities,
+                    lever,
+                    new Keyboard(this, keyH, getHorizontalScreenMid(10*GamePanel.tileSize), scale*8, txt),
+                    txt,
+                    new Player(this, keyH,100,300, 1, DataManager.saveData.playerName1),
+                new Player(this, keyH,100,400, 2, DataManager.saveData.playerName2)
+            );
+            simpleEntities.add(new NameChanger(this, lever, txt));
+
+        }else if(Room == 4){
+            World.TextField txt = new TextField("", boldFont,20, getHorizontalScreenMid((int)(tileSize*3.5f)), getVerticalScreenMid(0));
+            Collections.addAll(entities,
+                    txt,
+                    new KeyButton(this, keyH, getHorizontalScreenMid(0)-tileSize*5,getVerticalScreenMid(0),"X",txt),
+                    new KeyButton(this, keyH, getHorizontalScreenMid(0)+tileSize*5,getVerticalScreenMid(0),"←",txt),
+                    new Player(this, keyH,100,300, 1, DataManager.saveData.playerName1),
+                    new Player(this, keyH,100,400, 2, DataManager.saveData.playerName2)
+            );
         }
     }
     public boolean objectExists(Entity e){
         return entities.contains(e);
     }
 
+    public void PrintFPS(){
+        long currentTime = System.nanoTime();
+        float elapsedTime = (currentTime - previousTime) / 1000000000f;
+        previousTime = currentTime;
+
+        float fps = 1f / elapsedTime;
+
+        frames++;
+        if (currentTime - startTime >= 1000000000L){
+            actualFPS = fps;
+            frames = 0;
+            startTime = currentTime;
+        }
+    }
+
     @Override
     public void run() {
 
-        double drawInterval = 1000000000/FPS;
+        drawInterval = 1000000000/FPS;
         double nextDrawTime = System.nanoTime() + drawInterval;
 
         while (gameThread != null){
+            if(keyH.F11)
+                PrintFPS();
+
+            long startTime = System.nanoTime();
 
             // 1 UPDATE: update information
             update();
@@ -168,8 +223,6 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
     public void update(){
-        if(keyH.F11){
-        }
 
         backgroundMusicTimer--;
 
@@ -184,6 +237,7 @@ public class GamePanel extends JPanel implements Runnable{
             }
         }
         if(keyH.esc){
+            gameManager.dataManager.StoreData();
             LoadRoom(0);
         }
         gameManager.update();
@@ -221,6 +275,7 @@ public class GamePanel extends JPanel implements Runnable{
                 e.printStackTrace();
             }
         }
+
     }
 
     public void paintComponent(Graphics g){
@@ -228,12 +283,23 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(Color.WHITE);
         g2.setFont(mainFont);
+
+
         for (int i = 0; i < entities.size(); i++){
             entities.get(i).draw(g2);
         }
         for (SimpleEntity e : simpleEntities){
             e.draw(g2);
         }
+        if(keyH.F11){
+            for(int i = 0; i < entities.size(); i++){
+                Entity e = entities.get(i);
+                g2.drawRect(e.x,e.y, e.sizeHorizontal, e.sizeVertical);
+            }
+        }
+        if(keyH.F11)
+            g2.drawString("FPS: " + Math.round((actualFPS*100f))/100f, GamePanel.screenWidth-GamePanel.tileSize, GamePanel.tileSize);
+
         g2.dispose();
     }
 }
