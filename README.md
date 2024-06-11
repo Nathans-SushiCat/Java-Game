@@ -24,7 +24,7 @@ There is no actual gameplay its only a concept game for me.
 
 
 ## Building the project:
-To build Java-Game you need to have Java-JDK installed.
+To build and run Java-Game you need to have Java SE 18 installed.
 
 # Java-Game
 
