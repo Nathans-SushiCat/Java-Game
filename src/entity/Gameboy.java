@@ -27,6 +27,7 @@ public class Gameboy extends Entity{
     public Cartridge cartridge;
     int phaseSection= 0;
     boolean cartridgePlaced = false;
+    int nextPhaseSectionTimer = 0;
 
     enum Phase{
         NONE,
@@ -142,7 +143,12 @@ public class Gameboy extends Entity{
                     if (!gp.entities.contains(bitBullet)) {
                         bitBullet = new Gameboy_BitBullet(gp, x + 4, y - 1, 3, this);
                         gp.entities.add(bitBullet);
+                        nextPhaseSectionTimer++;
                     }
+                    if(nextPhaseSectionTimer <= 120)
+                        break;
+                    nextPhaseSectionTimer = 0;
+
                     break;
             }
         }

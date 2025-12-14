@@ -68,6 +68,8 @@ public class NPC extends Entity{
     @Override
     public void update() {
         writer.update();
+        writer.x = x;
+        writer.y = y-GamePanel.scale*6;
 
 
         spriteCounter ++;

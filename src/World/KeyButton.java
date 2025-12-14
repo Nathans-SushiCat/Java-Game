@@ -3,7 +3,6 @@ package World;
 import Main.Collision;
 import Main.GamePanel;
 import Main.KeyHandler;
-import World.TextField;
 import entity.Entity;
 import entity.Player;
 
@@ -16,11 +15,13 @@ public class KeyButton extends Entity {
     String text;
     BufferedImage ButtonImage;
     BufferedImage ButtonDownImage;
+    BufferedImage ButtonPressedImage;
     boolean pressed = false;
     boolean actionPerformed = false;
     World.TextField connectedTextField;
     KeyHandler keyH;
     float xTextpos, yTextpos;
+    boolean playerOverSelf = false;
 
     public KeyButton(GamePanel gp, KeyHandler keyH, int x, int y, String button, TextField textField){
         this.keyH = keyH;
@@ -39,7 +40,8 @@ public class KeyButton extends Entity {
     public void getSprites() {
         try {
             ButtonImage = ImageIO.read(getClass().getResourceAsStream("/Resources/Button/Button.png"));
-            ButtonDownImage = ImageIO.read(getClass().getResourceAsStream("/Resources/Button/Button-pressed1.png"));
+            ButtonDownImage = ImageIO.read(getClass().getResourceAsStream("/Resources/Button/Button-pressed2.png"));
+            ButtonPressedImage = ImageIO.read(getClass().getResourceAsStream("/Resources/Button/Button-pressed4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,11 +52,11 @@ public class KeyButton extends Entity {
         if(xTextpos == 0){
             xTextpos = x+sizeHorizontal/2 - (g2.getFontMetrics().stringWidth(text)/2);
         }
-        yTextpos = (int)(y+(GamePanel.scale*11)/(pressed ? 2 : 2.4));
-        g2.drawImage(pressed ? ButtonDownImage : ButtonImage, x,y,sizeHorizontal,sizeVertical, null);
+
+        yTextpos = (int)(y+(GamePanel.scale*11)/(playerOverSelf ? (pressed ? 1.7 : 2) : 2.4));
+
+        g2.drawImage(pressed ? ButtonPressedImage : playerOverSelf ? ButtonDownImage : ButtonImage, x,y,sizeHorizontal,sizeVertical, null);
         g2.drawString(text, xTextpos, yTextpos);
-
-
     }
 
     @Override
@@ -71,6 +73,7 @@ public class KeyButton extends Entity {
             actionPerformed = false;
             pressed = false;
         }
+        playerOverSelf = false;
     }
 
     public boolean getconnectedActionReleasedKey(){
@@ -86,11 +89,13 @@ public class KeyButton extends Entity {
 
     @Override
     public void handleCollision(Collision collision) {
-
+        //Player Is over Self
         if (collision.hasCollided() && collision.collidedEntity instanceof Player p) {
+            connectedToEntity = collision.collidedEntity;
+            playerOverSelf = true;
+            //Only over or also trigger press
             if((p.playerIndex == 1 && keyH.actionPressed) || (p.playerIndex == 2 && keyH.actionPressed2)){
                 pressed = true;
-                connectedToEntity = collision.collidedEntity;
             }
         }
     }
