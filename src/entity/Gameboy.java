@@ -2,11 +2,10 @@ package entity;
 
 import Main.GamePanel;
 import World.TypeWriter;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Gameboy extends Entity{
     TypeWriter writer;
@@ -28,6 +27,9 @@ public class Gameboy extends Entity{
     int phaseSection= 0;
     boolean cartridgePlaced = false;
     int nextPhaseSectionTimer = 0;
+    boolean flashImage = false;
+    int flashImageTimer = 0;
+    BufferedImage lastFrameImage = null;
 
     enum Phase{
         NONE,
@@ -78,79 +80,82 @@ public class Gameboy extends Entity{
         if(cartridge != null)
             cartridge.update();
 
-        if(phase.equals(Phase.START)){
-
-            if(writer.finished){
-                writer.changeText(startTexts[currentTextIndex]);
-                if(currentTextIndex+1 < startTexts.length)
-                    currentTextIndex++;
-                else{
-                    phase = Phase.LOADING;
-                    currentTextIndex = 0;
-                }
-            }
-
-        }else if(phase.equals(Phase.LOADING)){
-            if(totalLoadingTime > 320){
-                phase = Phase.values()[(int)(Math.random()*(5-3)+3 )];
-                totalLoadingTime = 0;
-            }
-
-            if(currentLoadingIndex <= 8)
-                currentLoadingIndex += 0.1f;
-            else
-                currentLoadingIndex = 1;
-            totalLoadingTime++;
-        }else if (phase.equals(Phase.SLOWTIME)) {
-            switch (phaseSection) {
-                case 0:
-                    moveTowards(GamePanel.tileSize * 4, y);
-                    if (direction.equals("idle")) {
-                        phaseSection++;
+        switch (phase) {
+            case START:
+                if(writer.finished){
+                    writer.changeText(startTexts[currentTextIndex]);
+                    if(currentTextIndex+1 < startTexts.length)
+                        currentTextIndex++;
+                    else{
+                        phase = Phase.LOADING;
+                        currentTextIndex = 0;
                     }
-                    break;
-                case 1:
-                    moveTowards(GamePanel.tileSize * 10, y);
-                    if (direction.equals("idle"))
-                        phaseSection++;
-                    break;
-                case 2:
-                    if (!cartridgePlaced) {
-                        cartridge = new Cartridge(gp, this, Cartridge.Cart.SLOWTIME, x - GamePanel.scale, y - (5 * GamePanel.tileSize), x - GamePanel.scale, y);
-                        cartridgePlaced = true;
-                    }
-                    if (cartridge == null) {
-                        writer.changeText("I can controll the time");
-                        gp.changeFPS(30);
-                        phaseSection++;
-                    }
-                    break;
-                case 3:
-                    if (writer.finished)
-                        phaseSection++;
-                    break;
-                case 4:
-                    writer.changeText("be ready for this");
-                    phaseSection++;
-                    break;
-                case 5:
-                    if (writer.finished) {
-                        gp.changeFPS(120);
-                        phaseSection++;
-                    }
-                    break;
-                case 6:
-                    if (!gp.entities.contains(bitBullet)) {
-                        bitBullet = new Gameboy_BitBullet(gp, x + 4, y - 1, 3, this);
-                        gp.entities.add(bitBullet);
-                        nextPhaseSectionTimer++;
-                    }
-                    if(nextPhaseSectionTimer <= 120)
+                }   break;
+            case LOADING:
+                if(totalLoadingTime > 320){
+                    phase = Phase.values()[(int)(Math.random()*(5-3)+3 )];
+                    totalLoadingTime = 0;
+                }   if(currentLoadingIndex <= 8)
+                    currentLoadingIndex += 0.1f;
+                else
+                    currentLoadingIndex = 1;
+                totalLoadingTime++;
+                break;
+            case SLOWTIME:
+                switch (phaseSection) {
+                    case 0:
+                        moveTowards(GamePanel.tileSize * 4, y);
+                        if (direction.equals("idle")) {
+                            phaseSection++;
+                        }
                         break;
-                    nextPhaseSectionTimer = 0;
-
-                    break;
-            }
+                    case 1:
+                        moveTowards(GamePanel.tileSize * 10, y);
+                        if (direction.equals("idle"))
+                            phaseSection++;
+                        break;
+                    case 2:
+                        if (!cartridgePlaced) {
+                            cartridge = new Cartridge(gp, this, Cartridge.Cart.SLOWTIME, x - GamePanel.scale, y - (5 * GamePanel.tileSize), x - GamePanel.scale, y);
+                            cartridgePlaced = true;
+                        }
+                        if (cartridge == null) {
+                            writer.changeText("I can controll the time");
+                            gp.changeFPS(30);
+                            phaseSection++;
+                        }
+                        break;
+                    case 3:
+                        flashImage = true;
+                        flashImageTimer++;
+                        if (writer.finished)
+                            phaseSection++;
+                        break;
+                    case 4:
+                        flashImage = false;
+                        writer.changeText("be ready for this");
+                        phaseSection++;
+                        break;
+                    case 5:
+                        if (writer.finished) {
+                            gp.changeFPS(120);
+                            phaseSection++;
+                        }
+                        break;
+                    case 6:
+                        if (!gp.entities.contains(bitBullet)) {
+                            bitBullet = new Gameboy_BitBullet(gp, x + 4, y - 1, 3, this);
+                            gp.entities.add(bitBullet);
+                            nextPhaseSectionTimer++;
+                        }
+                        if(nextPhaseSectionTimer <= 120)
+                            break;
+                        nextPhaseSectionTimer = 0;
+                        
+                        break;
+                }   break;
+            default:
+                break;
         }
     }
 
@@ -166,11 +171,26 @@ public class Gameboy extends Entity{
             cartridge.draw(g2);
 
         BufferedImage image = null;
-        if(direction.equals("left") ||direction.equals("idle"))
-            image = left1;
+        if(direction.equals("left") ||direction.equals("idle")){
+            if(!flashImage)
+                image = left1;
+            else{
+                if(flashImageTimer <= 5){
+                    image = lastFrameImage;
+                }
+                else if(lastFrameImage == left1){
+                    image = left2;
+                    flashImageTimer = 0;
+                }
+                else if(lastFrameImage == left2){
+                    image = left1;
+                    flashImageTimer = 0;
+                }
+            }
+        }
         else if(direction.equals("right"))
             image = right1;
-
         g2.drawImage(image, x, y, sizeHorizontal, sizeVertical, null);
+        lastFrameImage = image;
     }
 }
